@@ -16,7 +16,10 @@ namespace ScormPackager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new mainForm());
         }
+        public static string courseFolderPath, // переменная пути к папке с курсом
+                             packageSavePath;   // переменная пути сохранения Scorm пакета в виде ZIP-архива
+
     }
 }
