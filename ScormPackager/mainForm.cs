@@ -47,7 +47,7 @@ namespace ScormPackager
             if (Program.courseFolderPath == null) popOut.ShowDialog();// ошибка, если не указан путь к курсу
             else
             {
-                sfd.FileName = "archive";
+                sfd.FileName = "archive";// по умолчанию
                 sfd.DefaultExt = "zip";
                 sfd.Filter = "ZIP-archives (*.zip)|*.zip|All files (*.*)|*.*";
                 sfd.OverwritePrompt = true;
@@ -55,10 +55,14 @@ namespace ScormPackager
 
                 if (sfd.ShowDialog() == DialogResult.OK)// если произошло сохранение архива
                 {
-                    Program.packageSavePath = sfd.FileName;
+                    this.UseWaitCursor = true;
+                    Program.packageSavePath = sfd.FileName.Remove(sfd.FileName.LastIndexOf('\\')); 
+                    Program.zipFolder(Program.courseFolderPath, sfd.FileName);// архивирование
+                    Program.pathNameType(Program.courseFolderPath, Program.packageSavePath);// файл с путями ко всем файлам
                     popOut.ShowDialog();// запуск формы уведомлений
                 }
             }
+            this.UseWaitCursor = false;
             ActiveControl = label;
         }
 
