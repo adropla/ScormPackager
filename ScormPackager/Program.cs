@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.IO.Compression;
 using System.IO;
 using System.Xml;
+using HtmlAgilityPack;
 namespace ScormPackager
 {
     static class Program
@@ -43,8 +44,9 @@ namespace ScormPackager
             XmlAttribute href = manifest.CreateAttribute("href");
             XmlElement file = manifest.CreateElement("file");
 
+            var html = new HtmlAgilityPack.HtmlDocument();
+            html.Load("index.html");
             
-
             resource.Attributes.Append(identifier);
             resource.Attributes.Append(type);
             resource.Attributes.Append(adlcpscormType);
