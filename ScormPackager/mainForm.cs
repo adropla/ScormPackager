@@ -56,7 +56,8 @@ namespace ScormPackager
                 if (sfd.ShowDialog() == DialogResult.OK)// если произошло сохранение архива
                 {
                     this.UseWaitCursor = true;
-                    Program.packageSavePath = sfd.FileName.Remove(sfd.FileName.LastIndexOf('\\')); 
+                    Program.packageSavePath = sfd.FileName.Remove(sfd.FileName.LastIndexOf('\\'));
+                    Program.manifest(Program.courseFolderPath);
                     Program.zipFolder(Program.courseFolderPath, sfd.FileName);// архивирование
                     Program.pathNameType(Program.courseFolderPath, Program.packageSavePath);// файл с путями ко всем файлам
                     popOut.ShowDialog();// запуск формы уведомлений

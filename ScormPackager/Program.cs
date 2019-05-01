@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Compression;
 using System.IO;
+using System.Xml;
 namespace ScormPackager
 {
     static class Program
@@ -22,6 +23,38 @@ namespace ScormPackager
             Application.Run(new mainForm());
             
         }
+
+        public static void manifest(string path) // манифест
+        {
+            XmlDocument manifest = new XmlDocument();
+            manifest.Load("manifestTemplate.xml");
+            XmlElement xRoot = manifest.DocumentElement;
+            //organizations
+            XmlElement organizations = manifest.CreateElement("organizations");
+            XmlElement organization = manifest.CreateElement("organization");
+            XmlAttribute Default = manifest.CreateAttribute("default");
+            XmlText DefaultText = manifest.CreateTextNode("org1");
+            //resources
+            XmlElement resources = manifest.CreateElement("resources"); 
+            XmlElement resource = manifest.CreateElement("resource");
+            XmlAttribute identifier = manifest.CreateAttribute("identifier");
+            XmlAttribute type = manifest.CreateAttribute("type");
+            XmlAttribute adlcpscormType = manifest.CreateAttribute("adlcp:scormType");
+            XmlAttribute href = manifest.CreateAttribute("href");
+            XmlElement file = manifest.CreateElement("file");
+
+            
+
+            resource.Attributes.Append(identifier);
+            resource.Attributes.Append(type);
+            resource.Attributes.Append(adlcpscormType);
+            resource.Attributes.Append(href);
+            resources.AppendChild(resource);
+            resource.AppendChild(file);
+            xRoot.AppendChild(resources);
+            manifest.Save(path + @"\imsmanifest.xml");
+        }
+
         public static void zipFolder(string folder, string path)
         {
             ZipFile.CreateFromDirectory(folder, path, CompressionLevel.Fastest, true); // упаковка папки
@@ -70,6 +103,7 @@ namespace ScormPackager
 
     }
 
+    //class
 
     class getfiles
     {
