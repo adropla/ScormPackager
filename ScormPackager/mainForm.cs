@@ -12,6 +12,10 @@ namespace ScormPackager
 {
     public partial class mainForm : Form
     {
+        FolderBrowserDialog courseFolderDialog = new FolderBrowserDialog();
+        SaveFileDialog savingPackageDialog = new SaveFileDialog();
+        OpenFileDialog ofd = new OpenFileDialog();
+
         public mainForm()
         {
             InitializeComponent();
@@ -19,59 +23,68 @@ namespace ScormPackager
             StartPosition = FormStartPosition.Manual;
             Size resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(resolution.Width * 3 / 8, resolution.Height * 3 / 8);
-            ActiveControl = label;
+            ActiveControl = courseLabel;
         }
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            ActiveControl = label;
+            ActiveControl = courseLabel;// перевод фокуса на надпись
         }
 
-        FolderBrowserDialog fbd = new FolderBrowserDialog();
-        SaveFileDialog sfd = new SaveFileDialog();
-
-        private void browseButton_Click(object sender, EventArgs e)//обзор
+        private void browseButton_Click(object sender, EventArgs e)//обзор курса
         {
-            if (fbd.ShowDialog() == DialogResult.OK)
+            if (courseFolderDialog.ShowDialog() == DialogResult.OK)
             {
-                textBoxSelectFolder.Text = fbd.SelectedPath;
-                Program.courseFolderPath = fbd.SelectedPath; // записываем путь к курсу
+                textBoxSelectFolder.Text = courseFolderDialog.SelectedPath;
+                Program.courseFolderPath = courseFolderDialog.SelectedPath; // записываем путь к курсу в глобальную переменную
             }
-            ActiveControl = label;
+            ActiveControl = courseLabel;
         }
 
-        private void startPackaging_Click(object sender, EventArgs e)// упаковка
+        private void browseStartPageButton_Click(object sender, EventArgs e)// обзор статартовой html страницы
+        {
+            if (courseFolderDialog.SelectedPath != null) ofd.InitialDirectory = courseFolderDialog.SelectedPath;
+            ofd.Filter = "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                textBoxSelectStartPage.Text = ofd.FileName;
+                Program.startPagePath = ofd.FileName; // записываем путь к стартовой странице в глобальную переменную
+            }
+            ActiveControl = courseLabel;
+        }
+
+        private void startPackaging_Click(object sender, EventArgs e)//кнопка упаковка
         {
             notificationForm popOut = new notificationForm();
 
             if (Program.courseFolderPath == null) popOut.ShowDialog();// ошибка, если не указан путь к курсу
             else
             {
-                sfd.FileName = "archive";// по умолчанию
-                sfd.DefaultExt = "zip";
-                sfd.Filter = "ZIP-archives (*.zip)|*.zip|All files (*.*)|*.*";
-                sfd.OverwritePrompt = true;
-                sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                savingPackageDialog.FileName = "archive";// по умолчанию
+                savingPackageDialog.DefaultExt = "zip";
+                savingPackageDialog.Filter = "ZIP-archives (*.zip)|*.zip|All files (*.*)|*.*";
+                savingPackageDialog.OverwritePrompt = true;
+                savingPackageDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-                if (sfd.ShowDialog() == DialogResult.OK)// если произошло сохранение архива
+                if (savingPackageDialog.ShowDialog() == DialogResult.OK)// если произошло сохранение архива
                 {
                     this.UseWaitCursor = true;
-                    Program.packageSavePath = sfd.FileName.Remove(sfd.FileName.LastIndexOf('\\'));
+                    Program.packageSavePath = savingPackageDialog.FileName.Remove(savingPackageDialog.FileName.LastIndexOf('\\'));
                     Program.manifest(Program.courseFolderPath);
-                    Program.zipFolder(Program.courseFolderPath, sfd.FileName);// архивирование
+                    Program.zipFolder(Program.courseFolderPath, savingPackageDialog.FileName);// архивирование
                     Program.pathNameType(Program.courseFolderPath, Program.packageSavePath);// файл с путями ко всем файлам
                     popOut.ShowDialog();// запуск формы уведомлений
                 }
             }
             this.UseWaitCursor = false;
-            ActiveControl = label;
+            ActiveControl = courseLabel;
         }
 
         private void programmReference_Click(object sender, EventArgs e)// вызов справки
         {
             referenceForm popOutRef = new referenceForm();
             popOutRef.ShowDialog();
-            ActiveControl = label;
+            ActiveControl = courseLabel;
         }
     }
 }

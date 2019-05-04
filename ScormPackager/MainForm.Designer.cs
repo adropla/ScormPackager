@@ -31,9 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.referenceButton = new System.Windows.Forms.Button();
             this.startPackagingButton = new System.Windows.Forms.Button();
-            this.label = new System.Windows.Forms.Label();
-            this.browseButton = new System.Windows.Forms.Button();
+            this.courseLabel = new System.Windows.Forms.Label();
+            this.browseCourseButton = new System.Windows.Forms.Button();
             this.textBoxSelectFolder = new System.Windows.Forms.TextBox();
+            this.startPageLabel = new System.Windows.Forms.Label();
+            this.textBoxSelectStartPage = new System.Windows.Forms.TextBox();
+            this.browseStartPageButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // referenceButton
@@ -42,7 +45,7 @@
             this.referenceButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.referenceButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.referenceButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.referenceButton.Location = new System.Drawing.Point(216, 55);
+            this.referenceButton.Location = new System.Drawing.Point(216, 98);
             this.referenceButton.Margin = new System.Windows.Forms.Padding(2);
             this.referenceButton.Name = "referenceButton";
             this.referenceButton.Size = new System.Drawing.Size(84, 23);
@@ -58,7 +61,7 @@
             this.startPackagingButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.startPackagingButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.startPackagingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.startPackagingButton.Location = new System.Drawing.Point(305, 55);
+            this.startPackagingButton.Location = new System.Drawing.Point(304, 98);
             this.startPackagingButton.Margin = new System.Windows.Forms.Padding(2);
             this.startPackagingButton.Name = "startPackagingButton";
             this.startPackagingButton.Size = new System.Drawing.Size(84, 23);
@@ -68,32 +71,32 @@
             this.startPackagingButton.UseVisualStyleBackColor = false;
             this.startPackagingButton.Click += new System.EventHandler(this.startPackaging_Click);
             // 
-            // label
+            // courseLabel
             // 
-            this.label.AutoSize = true;
-            this.label.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label.Location = new System.Drawing.Point(12, 10);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(238, 15);
-            this.label.TabIndex = 13;
-            this.label.Text = "Выберите папку с курсом для упаковки";
+            this.courseLabel.AutoSize = true;
+            this.courseLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.courseLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.courseLabel.Location = new System.Drawing.Point(12, 10);
+            this.courseLabel.Name = "courseLabel";
+            this.courseLabel.Size = new System.Drawing.Size(238, 15);
+            this.courseLabel.TabIndex = 13;
+            this.courseLabel.Text = "Выберите папку с курсом для упаковки";
             // 
-            // browseButton
+            // browseCourseButton
             // 
-            this.browseButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.browseButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.browseButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.browseButton.Location = new System.Drawing.Point(305, 27);
-            this.browseButton.Margin = new System.Windows.Forms.Padding(2);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(83, 23);
-            this.browseButton.TabIndex = 12;
-            this.browseButton.Text = "Обзор...";
-            this.browseButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.browseButton.UseVisualStyleBackColor = false;
-            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            this.browseCourseButton.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.browseCourseButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.browseCourseButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.browseCourseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.browseCourseButton.Location = new System.Drawing.Point(306, 27);
+            this.browseCourseButton.Margin = new System.Windows.Forms.Padding(2);
+            this.browseCourseButton.Name = "browseCourseButton";
+            this.browseCourseButton.Size = new System.Drawing.Size(83, 23);
+            this.browseCourseButton.TabIndex = 12;
+            this.browseCourseButton.Text = "Обзор...";
+            this.browseCourseButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.browseCourseButton.UseVisualStyleBackColor = false;
+            this.browseCourseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
             // textBoxSelectFolder
             // 
@@ -109,16 +112,60 @@
             this.textBoxSelectFolder.TabIndex = 11;
             this.textBoxSelectFolder.Text = "...";
             // 
+            // startPageLabel
+            // 
+            this.startPageLabel.AutoSize = true;
+            this.startPageLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.startPageLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.startPageLabel.Location = new System.Drawing.Point(12, 53);
+            this.startPageLabel.Name = "startPageLabel";
+            this.startPageLabel.Size = new System.Drawing.Size(185, 15);
+            this.startPageLabel.TabIndex = 18;
+            this.startPageLabel.Text = "Выберите стартовую страницу";
+            // 
+            // textBoxSelectStartPage
+            // 
+            this.textBoxSelectStartPage.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.textBoxSelectStartPage.CausesValidation = false;
+            this.textBoxSelectStartPage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBoxSelectStartPage.ForeColor = System.Drawing.Color.DimGray;
+            this.textBoxSelectStartPage.Location = new System.Drawing.Point(12, 71);
+            this.textBoxSelectStartPage.Name = "textBoxSelectStartPage";
+            this.textBoxSelectStartPage.ReadOnly = true;
+            this.textBoxSelectStartPage.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.textBoxSelectStartPage.Size = new System.Drawing.Size(288, 23);
+            this.textBoxSelectStartPage.TabIndex = 16;
+            this.textBoxSelectStartPage.Text = "...";
+            // 
+            // browseStartPageButton
+            // 
+            this.browseStartPageButton.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.browseStartPageButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.browseStartPageButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.browseStartPageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.browseStartPageButton.Location = new System.Drawing.Point(305, 71);
+            this.browseStartPageButton.Margin = new System.Windows.Forms.Padding(2);
+            this.browseStartPageButton.Name = "browseStartPageButton";
+            this.browseStartPageButton.Size = new System.Drawing.Size(83, 23);
+            this.browseStartPageButton.TabIndex = 19;
+            this.browseStartPageButton.Text = "Обзор...";
+            this.browseStartPageButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.browseStartPageButton.UseVisualStyleBackColor = false;
+            this.browseStartPageButton.Click += new System.EventHandler(this.browseStartPageButton_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(400, 88);
+            this.ClientSize = new System.Drawing.Size(400, 128);
+            this.Controls.Add(this.browseStartPageButton);
+            this.Controls.Add(this.startPageLabel);
+            this.Controls.Add(this.textBoxSelectStartPage);
             this.Controls.Add(this.referenceButton);
             this.Controls.Add(this.startPackagingButton);
-            this.Controls.Add(this.label);
-            this.Controls.Add(this.browseButton);
+            this.Controls.Add(this.courseLabel);
+            this.Controls.Add(this.browseCourseButton);
             this.Controls.Add(this.textBoxSelectFolder);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -136,8 +183,11 @@
 
         private System.Windows.Forms.Button referenceButton;
         private System.Windows.Forms.Button startPackagingButton;
-        private System.Windows.Forms.Label label;
-        private System.Windows.Forms.Button browseButton;
+        private System.Windows.Forms.Label courseLabel;
+        private System.Windows.Forms.Button browseCourseButton;
         public System.Windows.Forms.TextBox textBoxSelectFolder;
+        private System.Windows.Forms.Label startPageLabel;
+        public System.Windows.Forms.TextBox textBoxSelectStartPage;
+        private System.Windows.Forms.Button browseStartPageButton;
     }
 }

@@ -101,8 +101,8 @@ namespace ScormPackager
         }
 
         public static string courseFolderPath, // переменная пути к папке с курсом
-                             packageSavePath;   // переменная пути сохранения Scorm пакета в виде ZIP-архива
-
+                             packageSavePath, // переменная пути сохранения Scorm пакета в виде ZIP-архива
+                             startPagePath;  // переменная пути к стартовой html странице 
     }
 
     //class
