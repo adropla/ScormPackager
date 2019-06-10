@@ -69,10 +69,10 @@ namespace ScormPackager
                 if (savingPackageDialog.ShowDialog() == DialogResult.OK)// если произошло сохранение архива
                 {
                     this.UseWaitCursor = true;
-                    Program.packageSavePath = savingPackageDialog.FileName.Remove(savingPackageDialog.FileName.LastIndexOf('\\'));
+                    Program.pathForFile = savingPackageDialog.FileName.Remove(savingPackageDialog.FileName.LastIndexOf('\\'));
                     Program.manifest(Program.courseFolderPath);
                     Program.zipFolder(Program.courseFolderPath, savingPackageDialog.FileName);// архивирование
-                    Program.pathNameType(Program.courseFolderPath, Program.packageSavePath);// файл с путями ко всем файлам
+                    Program.pathNameType(Program.courseFolderPath);// файл с путями ко всем файлам
                     popOut.ShowDialog();// запуск формы уведомлений
                 }
             }

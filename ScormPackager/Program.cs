@@ -44,13 +44,29 @@ namespace ScormPackager
             XmlAttribute href = manifest.CreateAttribute("href");
             XmlElement file = manifest.CreateElement("file");
 
-            var html = new HtmlAgilityPack.HtmlDocument();
-            html.Load("index.html");
-            
             resource.Attributes.Append(identifier);
             resource.Attributes.Append(type);
             resource.Attributes.Append(adlcpscormType);
             resource.Attributes.Append(href);
+
+            var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
+            var filesSplit = new List<string[]>();  //0 path 1 name 2 type
+            for (int i = 0; i < files.Count; i++)
+            {
+                filesSplit.Add(files[i].Split(' '));
+            }
+            for (int i = 0; i < filesSplit.Count; i++)
+            {
+                if (filesSplit[i][2] != "xsd")
+                {
+                    XmlText reference = manifest.CreateTextNode(filesSplit[i][0]);
+                    href.AppendChild(reference);
+                    file.Attributes.Append(href);
+                    resource.AppendChild(file);
+                }
+            }
+
+            //
             resources.AppendChild(resource);
             resource.AppendChild(file);
             xRoot.AppendChild(resources);
@@ -61,14 +77,14 @@ namespace ScormPackager
         {
             ZipFile.CreateFromDirectory(folder, path, CompressionLevel.Fastest, true); // упаковка папки
         }
-        public static void pathNameType(string folder, string pathForFile)
+        public static void pathNameType(string folder)
         {
             getfiles get = new getfiles();
             List<string> files = get.GetAllFiles(folder);
             var path = new List<string>();
             var name = new List<string>();
             var type = new List<string>();
-            using (var File = new FileStream(pathForFile + @"\PathNameType.txt", FileMode.Create)) ;
+            using (var File = new FileStream(pathForFile + @"\PathNameType.txt", FileMode.Create));
             foreach (string f in files)
             {
 
@@ -85,24 +101,17 @@ namespace ScormPackager
                 path.Add(temp);
             }
             var lines = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
-            foreach (string p in path)
+            for (int i = 0; i < path.Count(); i++)
             {
-                lines.Add(p);
-            }
-            foreach (string n in name)
-            {
-                lines.Add(n);
-            }
-            foreach (string t in type)
-            {
-                lines.Add(t);
+                lines.Add(path[i] + " " + name[i] + " " + type[i]);
             }
             File.WriteAllLines(pathForFile + @"\PathNameType.txt", lines); // записываем путь имя тип
         }
 
         public static string courseFolderPath, // переменная пути к папке с курсом
                              packageSavePath, // переменная пути сохранения Scorm пакета в виде ZIP-архива
-                             startPagePath;  // переменная пути к стартовой html странице 
+                             startPagePath,  // переменная пути к стартовой html странице 
+                             pathForFile;
     }
 
     //class
