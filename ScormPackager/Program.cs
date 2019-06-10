@@ -41,13 +41,12 @@ namespace ScormPackager
             XmlAttribute identifier = manifest.CreateAttribute("identifier");
             XmlAttribute type = manifest.CreateAttribute("type");
             XmlAttribute adlcpscormType = manifest.CreateAttribute("adlcp:scormType");
-            XmlAttribute href = manifest.CreateAttribute("href");
-            XmlElement file = manifest.CreateElement("file");
+
 
             resource.Attributes.Append(identifier);
             resource.Attributes.Append(type);
             resource.Attributes.Append(adlcpscormType);
-            resource.Attributes.Append(href);
+            //resource.Attributes.Append(href);
 
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             var filesSplit = new List<string[]>();  //0 path 1 name 2 type
@@ -59,7 +58,9 @@ namespace ScormPackager
             {
                 if (filesSplit[i][2] != "xsd")
                 {
-                    XmlText reference = manifest.CreateTextNode(filesSplit[i][0]);
+                    XmlAttribute href = manifest.CreateAttribute("href");
+                    XmlElement file = manifest.CreateElement("file");
+                    XmlText reference = manifest.CreateTextNode(filesSplit[i][0] + filesSplit[i][1] + '.' + filesSplit[i][2]);
                     href.AppendChild(reference);
                     file.Attributes.Append(href);
                     resource.AppendChild(file);
@@ -68,7 +69,6 @@ namespace ScormPackager
 
             //
             resources.AppendChild(resource);
-            resource.AppendChild(file);
             xRoot.AppendChild(resources);
             manifest.Save(path + @"\imsmanifest.xml");
         }
@@ -105,7 +105,7 @@ namespace ScormPackager
             {
                 lines.Add(path[i] + " " + name[i] + " " + type[i]);
             }
-            File.WriteAllLines(pathForFile + @"\PathNameType.txt", lines); // записываем путь имя тип
+            File.WriteAllLines(/*pathForFile + @*/"\\PathNameType.txt", lines); // записываем путь имя тип
         }
 
         public static string courseFolderPath, // переменная пути к папке с курсом
