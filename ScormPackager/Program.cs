@@ -79,6 +79,7 @@ namespace ScormPackager
         }
         public static void pathNameType(string folder)
         {
+            int num = folder.Split().Length;
             getfiles get = new getfiles();
             List<string> files = get.GetAllFiles(folder);
             var path = new List<string>();
@@ -93,12 +94,16 @@ namespace ScormPackager
                 type.Add(words[wordsLength - 1]);// путь, ибо после точки
                 name.Add(words[wordsLength - 2]);//название, ибо между \ и .
                 string temp = "";
-                for (int i = 0; i < wordsLength - 2; i++)
+                for (int i = num; i < wordsLength - 2; i++)
                 {
                     temp += words[i] + @"\"; // возвращение к виду Д/папка/
 
                 }
-                path.Add(temp);
+                
+                /*if (temp.Length != 0)
+                {*/
+                path.Add(temp); 
+                /*}*/
             }
             var lines = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             for (int i = 0; i < path.Count(); i++)
