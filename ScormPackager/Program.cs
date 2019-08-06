@@ -28,7 +28,7 @@ namespace ScormPackager
         public static void manifest(string path) // манифест
         {
             XmlDocument manifest = new XmlDocument();
-            manifest.Load("manifestTemplate.xml");
+            manifest.Load("imsmanifest.xml");
             XmlElement xRoot = manifest.DocumentElement;
             //organizations
             XmlElement organizations = manifest.CreateElement("organizations");
@@ -77,6 +77,7 @@ namespace ScormPackager
         {
             ZipFile.CreateFromDirectory(folder, path, CompressionLevel.Fastest, true); // упаковка папки
         }
+
         public static void pathNameType(string folder)
         {
             int num = folder.Split().Length;

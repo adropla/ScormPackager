@@ -60,19 +60,20 @@ namespace ScormPackager
             if (Program.courseFolderPath == null) popOut.ShowDialog();// ошибка, если не указан путь к курсу
             else
             {
-                savingPackageDialog.FileName = "archive";// по умолчанию
+                savingPackageDialog.FileName = "archive" + DateTime.Now.ToString("HHmmsstt");// название архива по умолчанию
                 savingPackageDialog.DefaultExt = "zip";
                 savingPackageDialog.Filter = "ZIP-archives (*.zip)|*.zip|All files (*.*)|*.*";
                 savingPackageDialog.OverwritePrompt = true;
+                savingPackageDialog.RestoreDirectory = true;
                 savingPackageDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
                 if (savingPackageDialog.ShowDialog() == DialogResult.OK)// если произошло сохранение архива
                 {
                     this.UseWaitCursor = true;
                     Program.pathForFile = savingPackageDialog.FileName.Remove(savingPackageDialog.FileName.LastIndexOf('\\'));
-                    Program.manifest(Program.courseFolderPath);
-                    Program.zipFolder(Program.courseFolderPath, savingPackageDialog.FileName);// архивирование
                     Program.pathNameType(Program.courseFolderPath);// файл с путями ко всем файлам
+                    Program.manifest(Program.courseFolderPath);// создание манифеста
+                    Program.zipFolder(Program.courseFolderPath, savingPackageDialog.FileName);// архивирование
                     popOut.ShowDialog();// запуск формы уведомлений
                 }
             }
