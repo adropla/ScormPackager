@@ -105,7 +105,7 @@ namespace ScormPackager
             {
                 lines.Add(path[i] + " " + name[i] + " " + type[i]);
             }
-            File.WriteAllLines(/*pathForFile + @*/"\\PathNameType.txt", lines); // записываем путь имя тип
+            File.WriteAllLines(pathForFile + @"\PathNameType.txt", lines); // записываем путь имя тип
         }
 
         public static string courseFolderPath, // переменная пути к папке с курсом
