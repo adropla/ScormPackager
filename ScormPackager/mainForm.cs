@@ -53,7 +53,7 @@ namespace ScormPackager
             ActiveControl = courseLabel;
         }
 
-        private void startPackaging_Click(object sender, EventArgs e)//кнопка упаковка
+        private void startPackaging_Click(object sender, EventArgs e)//кнопка упаковки
         {
             notificationForm popOut = new notificationForm();
 
@@ -73,10 +73,13 @@ namespace ScormPackager
                     Program.pathForFile = savingPackageDialog.FileName.Remove(savingPackageDialog.FileName.LastIndexOf('\\'));
                     Program.pathNameType(Program.courseFolderPath);// файл с путями ко всем файлам
                     Program.manifest(Program.courseFolderPath);// создание манифеста
+                    Program.copyXSDfiles(Program.courseFolderPath);// копирование xsd-файлов из ресурсов в папку курса
                     Program.zipFolder(Program.courseFolderPath, savingPackageDialog.FileName);// архивирование
+                    Program.clearTemp(Program.courseFolderPath);// удаляет из папки курса манифест и xsd-файлы
                     popOut.ShowDialog();// запуск формы уведомлений
                 }
             }
+
             this.UseWaitCursor = false;
             ActiveControl = courseLabel;
         }

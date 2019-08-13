@@ -25,10 +25,27 @@ namespace ScormPackager
             
         }
 
+        public static void copyXSDfiles(string path)// копирование xsd-файлов из ресурсов в папку курса
+        {
+            File.Copy(@"Resources/adlcp_rootv1p2.xsd", path + @"/adlcp_rootv1p2.xsd");
+            File.Copy(@"Resources/ims_xml.xsd", path + @"/ims_xml.xsd");
+            File.Copy(@"Resources/imscp_rootv1p1p2.xsd", path + @"/imscp_rootv1p1p2.xsd");
+            File.Copy(@"Resources/imsmd_rootv1p2p1.xsd", path + @"/imsmd_rootv1p2p1.xsd");
+        }
+
+        public static void clearTemp(string path)
+        {
+            File.Delete(path + @"/adlcp_rootv1p2.xsd");
+            File.Delete(path + @"/ims_xml.xsd");
+            File.Delete(path + @"/imscp_rootv1p1p2.xsd");
+            File.Delete(path + @"/imsmd_rootv1p2p1.xsd");
+            File.Delete(path + @"/imsmanifest.xml");
+        }
+
         public static void manifest(string path) // манифест
         {
             XmlDocument manifest = new XmlDocument();
-            manifest.Load("imsmanifest.xml");
+            manifest.Load(@"Resources\imsmanifest.xml");
             XmlElement xRoot = manifest.DocumentElement;
             //organizations
             XmlElement organizations = manifest.CreateElement("organizations");
