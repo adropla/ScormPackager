@@ -72,6 +72,7 @@ namespace ScormPackager
                     this.UseWaitCursor = true;
                     Program.pathForFile = savingPackageDialog.FileName.Remove(savingPackageDialog.FileName.LastIndexOf('\\'));
                     Program.pathNameType(Program.courseFolderPath);// файл с путями ко всем файлам
+                    Program.clearTemp(Program.courseFolderPath);
                     Program.manifest(Program.courseFolderPath);// создание манифеста
                     Program.copyXSDfiles(Program.courseFolderPath);// копирование xsd-файлов из ресурсов в папку курса
                     Program.zipFolder(Program.courseFolderPath, savingPackageDialog.FileName);// архивирование
