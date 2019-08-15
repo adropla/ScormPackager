@@ -103,7 +103,7 @@ namespace ScormPackager
             var path = new List<string>();
             var name = new List<string>();
             var type = new List<string>();
-            using (var File = new FileStream(pathForFile + @"\PathNameType.txt", FileMode.Create));
+            using (var File = new FileStream(pathForFile + @"\PathNameType.txt", FileMode.Create))
             foreach (string f in files)
             {
 
@@ -132,9 +132,9 @@ namespace ScormPackager
         }
 
         public static string courseFolderPath, // переменная пути к папке с курсом
-                             packageSavePath, // переменная пути сохранения Scorm пакета в виде ZIP-архива
-                             startPagePath,  // переменная пути к стартовой html странице 
-                             pathForFile;
+                             pathForFile,
+                             courseTitle; // название курса  
+        public static string[] a;
     }
 
     //class
