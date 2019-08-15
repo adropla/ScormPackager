@@ -97,7 +97,7 @@ namespace ScormPackager
 
         public static void pathNameType(string folder)
         {
-            int num = folder.Split().Length;
+            int num = folder.Split(new char[] {'\\'}).Length;
             getfiles get = new getfiles();
             List<string> files = get.GetAllFiles(folder);
             var path = new List<string>();
