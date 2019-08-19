@@ -36,16 +36,15 @@
             this.textBoxSelectFolder = new System.Windows.Forms.TextBox();
             this.courseNameTB = new System.Windows.Forms.TextBox();
             this.courseNameLabel = new System.Windows.Forms.Label();
-            this.sectionNameLabel = new System.Windows.Forms.Label();
-            this.sectionNameTB = new System.Windows.Forms.TextBox();
-            this.pageNameLabel = new System.Windows.Forms.Label();
-            this.pageNameTB = new System.Windows.Forms.TextBox();
             this.sectionsGV = new System.Windows.Forms.DataGridView();
-            this.pagesGV = new System.Windows.Forms.DataGridView();
             this.Folders = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Numbers = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pagesGV = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTitle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.writeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.sectionsGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pagesGV)).BeginInit();
             this.SuspendLayout();
@@ -56,7 +55,7 @@
             this.referenceButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.referenceButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.referenceButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.referenceButton.Location = new System.Drawing.Point(216, 464);
+            this.referenceButton.Location = new System.Drawing.Point(329, 365);
             this.referenceButton.Margin = new System.Windows.Forms.Padding(2);
             this.referenceButton.Name = "referenceButton";
             this.referenceButton.Size = new System.Drawing.Size(84, 23);
@@ -72,7 +71,7 @@
             this.startPackagingButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.startPackagingButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.startPackagingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.startPackagingButton.Location = new System.Drawing.Point(306, 464);
+            this.startPackagingButton.Location = new System.Drawing.Point(505, 365);
             this.startPackagingButton.Margin = new System.Windows.Forms.Padding(2);
             this.startPackagingButton.Name = "startPackagingButton";
             this.startPackagingButton.Size = new System.Drawing.Size(84, 23);
@@ -99,7 +98,7 @@
             this.browseCourseButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.browseCourseButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.browseCourseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.browseCourseButton.Location = new System.Drawing.Point(306, 27);
+            this.browseCourseButton.Location = new System.Drawing.Point(506, 27);
             this.browseCourseButton.Margin = new System.Windows.Forms.Padding(2);
             this.browseCourseButton.Name = "browseCourseButton";
             this.browseCourseButton.Size = new System.Drawing.Size(83, 23);
@@ -119,7 +118,7 @@
             this.textBoxSelectFolder.Name = "textBoxSelectFolder";
             this.textBoxSelectFolder.ReadOnly = true;
             this.textBoxSelectFolder.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.textBoxSelectFolder.Size = new System.Drawing.Size(288, 23);
+            this.textBoxSelectFolder.Size = new System.Drawing.Size(489, 23);
             this.textBoxSelectFolder.TabIndex = 11;
             this.textBoxSelectFolder.Text = "...";
             // 
@@ -130,10 +129,10 @@
             this.courseNameTB.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.courseNameTB.ForeColor = System.Drawing.Color.Black;
             this.courseNameTB.HideSelection = false;
-            this.courseNameTB.Location = new System.Drawing.Point(12, 343);
+            this.courseNameTB.Location = new System.Drawing.Point(12, 71);
             this.courseNameTB.Name = "courseNameTB";
             this.courseNameTB.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.courseNameTB.Size = new System.Drawing.Size(377, 23);
+            this.courseNameTB.Size = new System.Drawing.Size(577, 23);
             this.courseNameTB.TabIndex = 19;
             // 
             // courseNameLabel
@@ -141,59 +140,11 @@
             this.courseNameLabel.AutoSize = true;
             this.courseNameLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.courseNameLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.courseNameLabel.Location = new System.Drawing.Point(12, 325);
+            this.courseNameLabel.Location = new System.Drawing.Point(12, 53);
             this.courseNameLabel.Name = "courseNameLabel";
             this.courseNameLabel.Size = new System.Drawing.Size(148, 15);
             this.courseNameLabel.TabIndex = 20;
             this.courseNameLabel.Text = "Введите название курса";
-            // 
-            // sectionNameLabel
-            // 
-            this.sectionNameLabel.AutoSize = true;
-            this.sectionNameLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.sectionNameLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sectionNameLabel.Location = new System.Drawing.Point(12, 369);
-            this.sectionNameLabel.Name = "sectionNameLabel";
-            this.sectionNameLabel.Size = new System.Drawing.Size(151, 15);
-            this.sectionNameLabel.TabIndex = 22;
-            this.sectionNameLabel.Text = "Введите название главы";
-            // 
-            // sectionNameTB
-            // 
-            this.sectionNameTB.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.sectionNameTB.CausesValidation = false;
-            this.sectionNameTB.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sectionNameTB.ForeColor = System.Drawing.Color.Black;
-            this.sectionNameTB.HideSelection = false;
-            this.sectionNameTB.Location = new System.Drawing.Point(12, 387);
-            this.sectionNameTB.Name = "sectionNameTB";
-            this.sectionNameTB.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.sectionNameTB.Size = new System.Drawing.Size(377, 23);
-            this.sectionNameTB.TabIndex = 21;
-            // 
-            // pageNameLabel
-            // 
-            this.pageNameLabel.AutoSize = true;
-            this.pageNameLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pageNameLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.pageNameLabel.Location = new System.Drawing.Point(12, 413);
-            this.pageNameLabel.Name = "pageNameLabel";
-            this.pageNameLabel.Size = new System.Drawing.Size(173, 15);
-            this.pageNameLabel.TabIndex = 24;
-            this.pageNameLabel.Text = "Введите название страницы";
-            // 
-            // pageNameTB
-            // 
-            this.pageNameTB.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pageNameTB.CausesValidation = false;
-            this.pageNameTB.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.pageNameTB.ForeColor = System.Drawing.Color.Black;
-            this.pageNameTB.HideSelection = false;
-            this.pageNameTB.Location = new System.Drawing.Point(12, 431);
-            this.pageNameTB.Name = "pageNameTB";
-            this.pageNameTB.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.pageNameTB.Size = new System.Drawing.Size(377, 23);
-            this.pageNameTB.TabIndex = 23;
             // 
             // sectionsGV
             // 
@@ -204,21 +155,48 @@
             this.sectionsGV.BackgroundColor = System.Drawing.SystemColors.Window;
             this.sectionsGV.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
             this.sectionsGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.sectionsGV.ColumnHeadersVisible = false;
             this.sectionsGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Folders,
+            this.Title,
             this.Numbers});
-            this.sectionsGV.Location = new System.Drawing.Point(12, 56);
+            this.sectionsGV.Location = new System.Drawing.Point(12, 100);
             this.sectionsGV.MultiSelect = false;
             this.sectionsGV.Name = "sectionsGV";
             this.sectionsGV.RowHeadersVisible = false;
             this.sectionsGV.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.sectionsGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.sectionsGV.ShowCellErrors = false;
-            this.sectionsGV.Size = new System.Drawing.Size(186, 259);
+            this.sectionsGV.Size = new System.Drawing.Size(288, 259);
             this.sectionsGV.TabIndex = 27;
             this.sectionsGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.sectionsGV_CellContentClick);
-            this.sectionsGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.sectionsGV_EditingControlShowing);
+            this.sectionsGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Num_EditingControlShowing);
+            // 
+            // Folders
+            // 
+            this.Folders.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Folders.FillWeight = 1F;
+            this.Folders.HeaderText = "Раздел";
+            this.Folders.MinimumWidth = 2;
+            this.Folders.Name = "Folders";
+            this.Folders.ReadOnly = true;
+            this.Folders.Width = 69;
+            // 
+            // Title
+            // 
+            this.Title.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Title.HeaderText = "Имя раздела";
+            this.Title.MinimumWidth = 2;
+            this.Title.Name = "Title";
+            // 
+            // Numbers
+            // 
+            this.Numbers.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Numbers.HeaderText = "№";
+            this.Numbers.MaxInputLength = 3;
+            this.Numbers.MinimumWidth = 28;
+            this.Numbers.Name = "Numbers";
+            this.Numbers.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Numbers.Width = 30;
             // 
             // pagesGV
             // 
@@ -229,69 +207,72 @@
             this.pagesGV.BackgroundColor = System.Drawing.SystemColors.Window;
             this.pagesGV.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
             this.pagesGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.pagesGV.ColumnHeadersVisible = false;
             this.pagesGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
+            this.ColumnTitle2,
             this.dataGridViewTextBoxColumn2});
-            this.pagesGV.Location = new System.Drawing.Point(204, 56);
+            this.pagesGV.Location = new System.Drawing.Point(306, 100);
             this.pagesGV.MultiSelect = false;
             this.pagesGV.Name = "pagesGV";
             this.pagesGV.RowHeadersVisible = false;
             this.pagesGV.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.pagesGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.pagesGV.ShowCellErrors = false;
-            this.pagesGV.Size = new System.Drawing.Size(185, 259);
+            this.pagesGV.Size = new System.Drawing.Size(283, 259);
             this.pagesGV.TabIndex = 28;
-            this.pagesGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.pagesGV_EditingControlShowing);
-            // 
-            // Folders
-            // 
-            this.Folders.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Folders.HeaderText = "ColumnFolders2";
-            this.Folders.MinimumWidth = 150;
-            this.Folders.Name = "Folders";
-            this.Folders.ReadOnly = true;
-            // 
-            // Numbers
-            // 
-            this.Numbers.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Numbers.HeaderText = "ColumnNum1";
-            this.Numbers.MaxInputLength = 3;
-            this.Numbers.MinimumWidth = 28;
-            this.Numbers.Name = "Numbers";
-            this.Numbers.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Numbers.Width = 30;
+            this.pagesGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.pagesGV_CellContentClick);
+            this.pagesGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Num_EditingControlShowing);
             // 
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn1.HeaderText = "ColumnFolders2";
-            this.dataGridViewTextBoxColumn1.MinimumWidth = 150;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Страница";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 30;
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // ColumnTitle2
+            // 
+            this.ColumnTitle2.HeaderText = "Название страницы";
+            this.ColumnTitle2.MinimumWidth = 150;
+            this.ColumnTitle2.Name = "ColumnTitle2";
+            this.ColumnTitle2.Width = 150;
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn2.HeaderText = "ColumnNum1";
+            this.dataGridViewTextBoxColumn2.HeaderText = "№";
             this.dataGridViewTextBoxColumn2.MaxInputLength = 3;
             this.dataGridViewTextBoxColumn2.MinimumWidth = 28;
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxColumn2.Width = 28;
             // 
+            // writeButton
+            // 
+            this.writeButton.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.writeButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.writeButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.writeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.writeButton.Location = new System.Drawing.Point(417, 365);
+            this.writeButton.Margin = new System.Windows.Forms.Padding(2);
+            this.writeButton.Name = "writeButton";
+            this.writeButton.Size = new System.Drawing.Size(84, 23);
+            this.writeButton.TabIndex = 29;
+            this.writeButton.Text = "Запись";
+            this.writeButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.writeButton.UseVisualStyleBackColor = false;
+            this.writeButton.Click += new System.EventHandler(this.writeButton_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(400, 498);
+            this.ClientSize = new System.Drawing.Size(601, 398);
+            this.Controls.Add(this.writeButton);
             this.Controls.Add(this.pagesGV);
             this.Controls.Add(this.sectionsGV);
-            this.Controls.Add(this.pageNameLabel);
-            this.Controls.Add(this.pageNameTB);
-            this.Controls.Add(this.sectionNameLabel);
-            this.Controls.Add(this.sectionNameTB);
             this.Controls.Add(this.courseNameLabel);
             this.Controls.Add(this.courseNameTB);
             this.Controls.Add(this.referenceButton);
@@ -322,15 +303,14 @@
         public System.Windows.Forms.TextBox textBoxSelectFolder;
         public System.Windows.Forms.TextBox courseNameTB;
         private System.Windows.Forms.Label courseNameLabel;
-        private System.Windows.Forms.Label sectionNameLabel;
-        public System.Windows.Forms.TextBox sectionNameTB;
-        private System.Windows.Forms.Label pageNameLabel;
-        public System.Windows.Forms.TextBox pageNameTB;
         private System.Windows.Forms.DataGridView sectionsGV;
         private System.Windows.Forms.DataGridView pagesGV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Folders;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Numbers;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTitle2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Folders;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Numbers;
+        private System.Windows.Forms.Button writeButton;
     }
 }

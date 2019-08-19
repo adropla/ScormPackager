@@ -51,16 +51,9 @@ namespace ScormPackager
             XmlElement organizations = manifest.CreateElement("organizations");
             XmlElement organization = manifest.CreateElement("organization");
             XmlAttribute Default = manifest.CreateAttribute("default");
-            XmlText DefaultText = manifest.CreateTextNode("org1");
+            XmlText DefaultText = manifest.CreateTextNode("default_organizations");
             //resources
             XmlElement resources = manifest.CreateElement("resources"); 
-            //XmlElement resource = manifest.CreateElement("resource");
-
-            /*resource.Attributes.Append(identifier);
-            resource.Attributes.Append(type);
-            resource.Attributes.Append(adlcpscormType);
-            resource.Attributes.Append(href); */
-
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             var filesSplit = new List<string[]>();  //0 path 1 name 2 type
             for (int i = 0; i < files.Count; i++)
@@ -151,7 +144,9 @@ namespace ScormPackager
         public static string courseFolderPath, // переменная пути к папке с курсом
                              pathForFile,
                              courseTitle; // название курса  
-        public static string[] a;
+        public static string[,] Titles,    // [sections, pages]
+                                OrgIDref, 
+                                OrgHref;
     }
 
     //class
@@ -175,12 +170,8 @@ namespace ScormPackager
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
             }
-
-
-
             return files;
         }
     }

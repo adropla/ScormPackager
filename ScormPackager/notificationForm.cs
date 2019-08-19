@@ -25,6 +25,11 @@ namespace ScormPackager
                 label.Location = new Point(23, 0);
                 label.Text = "Ошибка!\nУкажите папку с курсом";
             }
+            else if (Program.courseTitle == null)
+            {
+                label.Location = new Point(23, 0);
+                label.Text = "Ошибка!\nУкажите название курса";
+            }
             else
                 label.Text = "Упаковка выполена успешно!";
         }

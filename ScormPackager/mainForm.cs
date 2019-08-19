@@ -16,18 +16,16 @@ namespace ScormPackager
         FolderBrowserDialog courseFolderDialog = new FolderBrowserDialog();
         SaveFileDialog savingPackageDialog = new SaveFileDialog();
         OpenFileDialog ofd = new OpenFileDialog();
+        int sections = 0, pages = 0;
 
         public mainForm()
         {
             InitializeComponent();
+            DoubleBuffered = true;
             // красивое расположение окна на экране
             StartPosition = FormStartPosition.Manual;
             Size resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(resolution.Width * 3 / 8, resolution.Height * 3 / 8);
-            typeof(Control).GetProperty("DoubleBuffered",
-                             System.Reflection.BindingFlags.NonPublic |
-                             System.Reflection.BindingFlags.Instance)
-               .SetValue(sectionsGV, true, null);
             ActiveControl = courseLabel;
         }
 
@@ -44,11 +42,29 @@ namespace ScormPackager
                 Program.courseFolderPath = courseFolderDialog.SelectedPath; // записываем путь к курсу в глобальную переменную
                 DirectoryInfo info = new DirectoryInfo(Program.courseFolderPath);
                 DirectoryInfo[] dirs = info.GetDirectories();
-                FileInfo[] files = info.GetFiles();
 
+                int i = 0;
                 sectionsGV.Rows.Clear();
-                foreach (DirectoryInfo d in dirs) sectionsGV.Rows.Add(d.ToString());// запись в таблицу папок-разделов
-                sectionsGV_CellContentClick(null, new DataGridViewCellEventArgs(0,0));
+                foreach (DirectoryInfo d in dirs)
+                {
+                    FileInfo[] files = d.GetFiles();
+                    foreach (FileInfo f in files)
+                    {
+                        if ((f.Extension == ".html") || (f.Extension == ".js"))
+                            i++;
+                    }
+                    if (i > pages) pages = i;
+                    i = 0;
+                    sections++;
+
+                    sectionsGV.Rows.Add(d.ToString());// запись в левую таблицу папок-разделов
+                }
+
+                sectionsGV.AutoResizeColumns();
+                Program.Titles = new string[sections, pages];
+                Program.OrgHref = new string[sections, pages];
+                Program.OrgIDref = new string[sections, pages];
+                sectionsGV_CellContentClick(null, new DataGridViewCellEventArgs(0, 0));
             }
             ActiveControl = courseLabel;
         }
@@ -57,9 +73,12 @@ namespace ScormPackager
         {
             notificationForm popOut = new notificationForm();
 
-            Program.courseTitle = courseNameTB.ToString();
+            Program.courseTitle = courseNameTB.Text.ToString();// название курса в переменную
 
-            if ((Program.courseFolderPath == null) || (Program.courseTitle == null)) popOut.ShowDialog();// ошибка, если не указан путь к курсу
+            if ((Program.courseFolderPath == null) | (Program.courseTitle == ""))
+            {
+                popOut.ShowDialog();// ошибка, если не указан путь к курсу
+            }
             else
             {
                 savingPackageDialog.FileName = "archive" + DateTime.Now.ToString("HHmmsstt");// название архива по умолчанию
@@ -74,11 +93,10 @@ namespace ScormPackager
                     this.UseWaitCursor = true;
                     Program.pathForFile = savingPackageDialog.FileName.Remove(savingPackageDialog.FileName.LastIndexOf('\\'));
                     Program.pathNameType(Program.courseFolderPath);// файл с путями ко всем файлам
-                    Program.clearTemp(Program.courseFolderPath);
                     Program.manifest(Program.courseFolderPath);// создание манифеста
                     Program.copyXSDfiles(Program.courseFolderPath);// копирование xsd-файлов из ресурсов в папку курса
                     Program.zipFolder(Program.courseFolderPath, savingPackageDialog.FileName);// архивирование
-                    Program.clearTemp(Program.courseFolderPath);// удаляет из папки курса манифест и xsd-файлы
+                    Program.clearTemp(Program.courseFolderPath);// удаляет из начальной папки курса манифест и xsd-файлы
                     popOut.ShowDialog();// запуск формы уведомлений
                 }
             }
@@ -96,22 +114,27 @@ namespace ScormPackager
 
         private void sectionsGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            pagesGV.Rows.Clear();
-
+            //заполнение правой таблицы
             string selectedFolder = sectionsGV.CurrentRow.Cells[0].Value.ToString();
-
             DirectoryInfo info = new DirectoryInfo(Program.courseFolderPath + "\\" + selectedFolder);
             FileInfo[] files = info.GetFiles();
+            pagesGV.Rows.Clear();
             foreach (FileInfo f in files)
             {
-                if ((f.Extension == ".html") || (f.Extension == ".js")) pagesGV.Rows.Add(f.ToString()); // запись в листбокс html и js-файлов из раздела
+                if ((f.Extension == ".html") || (f.Extension == ".js"))
+                {
+                    pages++;
+                    pagesGV.Rows.Add(f.ToString()); // запись в листбокс html и js-файлов из раздела
+                }
             }
+            pagesGV.AutoResizeColumns();
+            pagesGV.Update();
         }
 
-        private void sectionsGV_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        private void Num_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-
-            if (sectionsGV.CurrentCell.ColumnIndex == 1)
+            DataGridView a = sender as DataGridView;
+            if (a.CurrentCell.ColumnIndex == 2)
             {
                 TextBox tb = (TextBox)e.Control;
                 tb.KeyPress += new KeyPressEventHandler(ColumnNum1_KeyPress);
@@ -121,21 +144,7 @@ namespace ScormPackager
                 TextBox tb = (TextBox)e.Control;
                 tb.KeyPress -= ColumnNum1_KeyPress;
             }
-        }
-
-        private void pagesGV_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-
-            if (pagesGV.CurrentCell.ColumnIndex == 1)
-            {
-                TextBox tb = (TextBox)e.Control;
-                tb.KeyPress += new KeyPressEventHandler(ColumnNum1_KeyPress);
-            }
-            else
-            {
-                TextBox tb = (TextBox)e.Control;
-                tb.KeyPress -= ColumnNum1_KeyPress;
-            }
+            a.Update();
         }
 
         void ColumnNum1_KeyPress(object sender, KeyPressEventArgs e)
@@ -145,6 +154,16 @@ namespace ScormPackager
                 if ((e.KeyChar != (char)Keys.Back) || (e.KeyChar != (char)Keys.Delete))
                 { e.Handled = true; }
             }
+        }
+
+        private void writeButton_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void pagesGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
