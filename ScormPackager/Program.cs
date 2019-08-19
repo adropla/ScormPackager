@@ -51,7 +51,7 @@ namespace ScormPackager
             XmlElement organizations = manifest.CreateElement("organizations");
             XmlElement organization = manifest.CreateElement("organization");
             XmlAttribute Default = manifest.CreateAttribute("default");
-            XmlText DefaultText = manifest.CreateTextNode("org1");
+            XmlText DefaultText = manifest.CreateTextNode("default_organizations");
             //resources
             XmlElement resources = manifest.CreateElement("resources"); 
             XmlElement resource = manifest.CreateElement("resource");
@@ -84,7 +84,6 @@ namespace ScormPackager
                 }
             }
 
-            //
             resources.AppendChild(resource);
             xRoot.AppendChild(resources);
             manifest.Save(path + @"\imsmanifest.xml");
@@ -134,7 +133,9 @@ namespace ScormPackager
         public static string courseFolderPath, // переменная пути к папке с курсом
                              pathForFile,
                              courseTitle; // название курса  
-        public static string[] a;
+        public static string[,] Titles,    // [sections, pages]
+                                OrgIDref, 
+                                OrgHref;
     }
 
     //class
@@ -158,12 +159,8 @@ namespace ScormPackager
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
             }
-
-
-
             return files;
         }
     }
