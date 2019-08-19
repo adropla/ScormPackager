@@ -54,16 +54,12 @@ namespace ScormPackager
             XmlText DefaultText = manifest.CreateTextNode("org1");
             //resources
             XmlElement resources = manifest.CreateElement("resources"); 
-            XmlElement resource = manifest.CreateElement("resource");
-            XmlAttribute identifier = manifest.CreateAttribute("identifier");
-            XmlAttribute type = manifest.CreateAttribute("type");
-            XmlAttribute adlcpscormType = manifest.CreateAttribute("adlcp:scormType");
+            //XmlElement resource = manifest.CreateElement("resource");
 
-
-            resource.Attributes.Append(identifier);
+            /*resource.Attributes.Append(identifier);
             resource.Attributes.Append(type);
             resource.Attributes.Append(adlcpscormType);
-            //resource.Attributes.Append(href);
+            resource.Attributes.Append(href); */
 
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             var filesSplit = new List<string[]>();  //0 path 1 name 2 type
@@ -73,19 +69,40 @@ namespace ScormPackager
             }
             for (int i = 0; i < filesSplit.Count; i++)
             {
-                if (filesSplit[i][2] != "xsd")
+                if (filesSplit[i][2] == "html")
                 {
-                    XmlAttribute href = manifest.CreateAttribute("href");
                     XmlElement file = manifest.CreateElement("file");
+                    XmlElement resource = manifest.CreateElement("resource");
+                    XmlAttribute identifier = manifest.CreateAttribute("identifier");
+                    XmlAttribute type = manifest.CreateAttribute("type");
+                    XmlText webcontent = manifest.CreateTextNode("webcontent");
+                    type.AppendChild(webcontent);
+                    XmlText id = manifest.CreateTextNode(i.ToString());
+                    identifier.AppendChild(id);
+                    XmlAttribute adlcpscormType = manifest.CreateAttribute("adlcp", "scormtype", "http://www.adlnet.org/xsd/adlcp_rootv1p2");
+                    XmlText asset = manifest.CreateTextNode("asset");
+                    adlcpscormType.AppendChild(asset);
+                    XmlAttribute href = manifest.CreateAttribute("href");
                     XmlText reference = manifest.CreateTextNode(filesSplit[i][0] + filesSplit[i][1] + '.' + filesSplit[i][2]);
                     href.AppendChild(reference);
-                    file.Attributes.Append(href);
+                    resource.Attributes.Append(identifier);
+                    resource.Attributes.Append(type);
+                    resource.Attributes.Append(adlcpscormType);
+                    resource.Attributes.Append(href);
+                    XmlAttribute hrefcopy = manifest.CreateAttribute("href");
+                    XmlText referencecopy = manifest.CreateTextNode(filesSplit[i][0] + filesSplit[i][1] + '.' + filesSplit[i][2]);
+                    hrefcopy.AppendChild(referencecopy);
+                    file.Attributes.Append(hrefcopy);
                     resource.AppendChild(file);
+                    XmlElement dependency = manifest.CreateElement("dependency");
+                    XmlText common = manifest.CreateTextNode("common_files");
+                    XmlAttribute identifiercommon = manifest.CreateAttribute("identifier");
+                    identifiercommon.AppendChild(common);
+                    dependency.Attributes.Append(identifiercommon);
+                    resource.AppendChild(dependency);
+                    resources.AppendChild(resource);
                 }
             }
-
-            //
-            resources.AppendChild(resource);
             xRoot.AppendChild(resources);
             manifest.Save(path + @"\imsmanifest.xml");
         }
