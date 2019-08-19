@@ -53,7 +53,7 @@ namespace ScormPackager
             XmlAttribute Default = manifest.CreateAttribute("default");
             XmlText DefaultText = manifest.CreateTextNode("default_organizations");
             //resources
-            XmlElement resources = manifest.CreateElement("resources"); 
+            XmlElement resources = manifest.CreateElement("resources", "http://www.imsproject.org/xsd/imscp_rootv1p1p2"); 
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             var filesSplit = new List<string[]>();  //0 path 1 name 2 type
             for (int i = 0; i < files.Count; i++)
@@ -64,8 +64,8 @@ namespace ScormPackager
             {
                 if (filesSplit[i][2] == "html")
                 {
-                    XmlElement file = manifest.CreateElement("file");
-                    XmlElement resource = manifest.CreateElement("resource");
+                    XmlElement file = manifest.CreateElement("file", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
+                    XmlElement resource = manifest.CreateElement("resource", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
                     XmlAttribute identifier = manifest.CreateAttribute("identifier");
                     XmlAttribute type = manifest.CreateAttribute("type");
                     XmlText webcontent = manifest.CreateTextNode("webcontent");
@@ -87,7 +87,7 @@ namespace ScormPackager
                     hrefcopy.AppendChild(referencecopy);
                     file.Attributes.Append(hrefcopy);
                     resource.AppendChild(file);
-                    XmlElement dependency = manifest.CreateElement("dependency");
+                    XmlElement dependency = manifest.CreateElement("dependency", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
                     XmlText common = manifest.CreateTextNode("common_files");
                     XmlAttribute identifiercommon = manifest.CreateAttribute("identifier");
                     identifiercommon.AppendChild(common);
