@@ -16,7 +16,7 @@ namespace ScormPackager
         FolderBrowserDialog courseFolderDialog = new FolderBrowserDialog();
         SaveFileDialog savingPackageDialog = new SaveFileDialog();
         OpenFileDialog ofd = new OpenFileDialog();
-        int sections = 0, pages = 0;
+        int sections = 0, pages = 0, enumer = 0;
 
         public mainForm()
         {
@@ -119,18 +119,37 @@ namespace ScormPackager
             DirectoryInfo info = new DirectoryInfo(Program.courseFolderPath + "\\" + selectedFolder);
             FileInfo[] files = info.GetFiles();
             pagesGV.Rows.Clear();
-            foreach (FileInfo f in files)
+            if ((sectionsGV.CurrentRow.Cells[2].Value != null) && (Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), 0] != null))
             {
-                if ((f.Extension == ".html") || (f.Extension == ".js"))
+                int i = 1;
+                while (Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i] != null)
                 {
-                    pages++;
-                    pagesGV.Rows.Add(f.ToString()); // запись в листбокс html и js-файлов из раздела
+                    string[] row = new string[] { Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i],
+                                                  Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i],
+                                                  i.ToString() };
+                    pagesGV.Rows.Add(row);
+                    //pagesGV.Rows[i-1].Cells[0].Value = Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i];
+                    //pagesGV.Rows[i-1].Cells[1].Value = Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i];
+                    //pagesGV.Rows[i-1].Cells[2].Value = i;
+                    i++;
+                }
+            }
+            else
+            {
+                foreach (FileInfo f in files)
+                {
+                    if ((f.Extension == ".html") || (f.Extension == ".js"))
+                    {
+                        pages++;
+                        pagesGV.Rows.Add(f.ToString()); // запись в листбокс html и js-файлов из раздела
+                    }
                 }
             }
             pagesGV.AutoResizeColumns();
             pagesGV.Update();
         }
 
+        //bug - после ввода цифр не вводят буквы
         private void Num_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             DataGridView a = sender as DataGridView;
@@ -158,7 +177,17 @@ namespace ScormPackager
 
         private void writeButton_Click(object sender, EventArgs e)
         {
-            
+            Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), 0] = sectionsGV.CurrentRow.Cells[1].Value.ToString();
+            foreach (DataGridViewRow a in pagesGV.Rows)
+            {
+                Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                               Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[1].Value.ToString();
+                Program.OrgIDref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                                 Convert.ToInt32(a.Cells[2].Value.ToString())] = enumer.ToString();
+                Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                                 Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[0].Value.ToString();
+                enumer++;
+            }
         }
 
         private void pagesGV_CellContentClick(object sender, DataGridViewCellEventArgs e)

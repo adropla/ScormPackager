@@ -52,6 +52,9 @@ namespace ScormPackager
             XmlElement organization = manifest.CreateElement("organization");
             XmlAttribute Default = manifest.CreateAttribute("default");
             XmlText DefaultText = manifest.CreateTextNode("default_organizations");
+            
+
+
             //resources
             XmlElement resources = manifest.CreateElement("resources"); 
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
