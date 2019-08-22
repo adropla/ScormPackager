@@ -17,12 +17,9 @@ namespace ScormPackager
         [STAThread]
         static void Main()
         {
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
             Application.Run(new mainForm());
-            
         }
 
         public static void copyXSDfiles(string path)// копирование xsd-файлов из ресурсов в папку курса
@@ -40,22 +37,85 @@ namespace ScormPackager
             File.Delete(path + @"/imscp_rootv1p1p2.xsd");
             File.Delete(path + @"/imsmd_rootv1p2p1.xsd");
             File.Delete(path + @"/imsmanifest.xml");
+            File.Delete(pathForFile + @"\PathNameType.txt");
         }
-
+        
         public static void manifest(string path) // манифест
         {
+            int sectionNumerator = 1, pageNumerator = 1;
             XmlDocument manifest = new XmlDocument();
-            manifest.Load(@"Resources\imsmanifest.xml");
-            XmlElement xRoot = manifest.DocumentElement;
+            XmlDeclaration xmlDeclaration = manifest.CreateXmlDeclaration("1.0", "utf-8", "no");
+            manifest.AppendChild(xmlDeclaration);
+            
+            // тег manifest
+            XmlElement manifestElement = manifest.CreateElement("manifest");
+            // атрибуты тега manifest ? сделать переносы атрибутов на новую строку
+            manifestElement.SetAttribute("identifier", "com.scorm.golfsamples.contentpackaging.multioscosinglefile.12");
+            manifestElement.SetAttribute("version", "1");
+            manifestElement.SetAttribute("xmlns", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
+            manifestElement.SetAttribute("xmlns:adlcp", "http://www.adlnet.org/xsd/adlcp_rootv1p2");
+            manifestElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            // ? сделать переносы аргумента
+            manifestElement.SetAttribute("xsi:schemaLocation", "http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd");
+
+            //metadata
+            XmlElement metadata = manifest.CreateElement("metadata");
+            XmlElement schema = manifest.CreateElement("schema");
+            schema.InnerText = "ADL SCORM";
+            XmlElement schemaversion = manifest.CreateElement("schemaversion");
+            schemaversion.InnerText = "1.2";
+            metadata.AppendChild(schema);
+            metadata.AppendChild(schemaversion);
+            manifestElement.AppendChild(metadata);
+
             //organizations
+            // ? сделать определение опроса 
             XmlElement organizations = manifest.CreateElement("organizations");
             XmlElement organization = manifest.CreateElement("organization");
-            XmlAttribute Default = manifest.CreateAttribute("default");
-            XmlText DefaultText = manifest.CreateTextNode("default_organizations");
-            
+            XmlElement orgTitle = manifest.CreateElement("title");
+            orgTitle.InnerText = Program.courseTitle;
+            organization.AppendChild(orgTitle);
 
+            for (int i = 0; i < sections; i++)
+            {
+                XmlElement sectionItem = manifest.CreateElement("item");
+                sectionItem.SetAttribute("identifier", "section" + (sectionNumerator++).ToString());
+                XmlElement sectionTitle = manifest.CreateElement("title");
+                sectionTitle.InnerText = Titles[i, 0];
+                sectionItem.AppendChild(sectionTitle);
+                for (int j = 0; j < pages; j++)
+                {
+                    if (Program.OrgIDref[i, j] != null)
+                    {
+                        XmlElement pageItem = manifest.CreateElement("item");
+                        XmlElement pageTitle = manifest.CreateElement("title");
+                        XmlText pageTextTitle = manifest.CreateTextNode(Titles[i, j]);
+                        pageTitle.AppendChild(pageTextTitle);// Название страницы
+                        pageItem.AppendChild(pageTitle);
+                        pageItem.SetAttribute("identifier", "page" + (pageNumerator++).ToString());
+                        XmlAttribute identifierref = manifest.CreateAttribute("identifierref");
+                        identifierref.InnerText = Program.OrgIDref[i, j];
+                        pageItem.Attributes.Append(identifierref);
+                        sectionItem.AppendChild(pageItem);
+                    }
+                }
+                organization.AppendChild(sectionItem);
+            }
+            // атрибуты organisation
+            XmlAttribute orgIdentifier = manifest.CreateAttribute("identifier");
+            XmlText orgIdentifierText = manifest.CreateTextNode("default_organization");
+            orgIdentifier.AppendChild(orgIdentifierText);
+            organization.Attributes.Append(orgIdentifier);
+            organizations.AppendChild(organization);
+            // атрибуты organisations
+            XmlAttribute Default = manifest.CreateAttribute("default");
+            XmlText defaultText = manifest.CreateTextNode("default_organization");
+            Default.AppendChild(defaultText);
+            organizations.Attributes.Append(Default);
+            manifestElement.AppendChild(organizations);
 
             //resources
+            // в dependecy записываются все i-файлы из OrgHref[0, i](там все файлы из папки shared, если она вообще есть)
             XmlElement resources = manifest.CreateElement("resources", "http://www.imsproject.org/xsd/imscp_rootv1p1p2"); 
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             var filesSplit = new List<string[]>();  //0 path 1 name 2 type
@@ -65,15 +125,18 @@ namespace ScormPackager
             }
             for (int i = 0; i < filesSplit.Count; i++)
             {
-                if (filesSplit[i][2] == "html")
+                if ((filesSplit[i][2] == "html") || (filesSplit[i][2] == "js"))
                 {
                     XmlElement file = manifest.CreateElement("file", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
                     XmlElement resource = manifest.CreateElement("resource", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
-                    XmlAttribute identifier = manifest.CreateAttribute("identifier");
                     XmlAttribute type = manifest.CreateAttribute("type");
                     XmlText webcontent = manifest.CreateTextNode("webcontent");
                     type.AppendChild(webcontent);
-                    XmlText id = manifest.CreateTextNode(i.ToString());
+                    XmlAttribute identifier = manifest.CreateAttribute("identifier");
+                    //id берётся из OrgIDref сопоставляя с массивом OrgHref
+                    //например, OrgHref[1,1] = "course.html" , OrgIDref[1,1] = 5;
+                    //значит id файла "course.html" равно что ты пидор ёпта
+                    XmlText id = manifest.CreateTextNode(i.ToString());//?
                     identifier.AppendChild(id);
                     XmlAttribute adlcpscormType = manifest.CreateAttribute("adlcp", "scormtype", "http://www.adlnet.org/xsd/adlcp_rootv1p2");
                     XmlText asset = manifest.CreateTextNode("asset");
@@ -99,7 +162,9 @@ namespace ScormPackager
                     resources.AppendChild(resource);
                 }
             }
-            xRoot.AppendChild(resources);
+
+            manifestElement.AppendChild(resources);
+            manifest.AppendChild(manifestElement);
             manifest.Save(path + @"\imsmanifest.xml");
         }
 
@@ -150,6 +215,7 @@ namespace ScormPackager
         public static string[,] Titles,    // [sections, pages]
                                 OrgIDref, 
                                 OrgHref;
+        public static int sections = 0, pages = 0, enumer = 0;
     }
 
     //class

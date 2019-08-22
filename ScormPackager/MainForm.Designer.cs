@@ -220,7 +220,6 @@
             this.pagesGV.ShowCellErrors = false;
             this.pagesGV.Size = new System.Drawing.Size(283, 259);
             this.pagesGV.TabIndex = 28;
-            this.pagesGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.pagesGV_CellContentClick);
             this.pagesGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Num_EditingControlShowing);
             // 
             // dataGridViewTextBoxColumn1

@@ -16,7 +16,6 @@ namespace ScormPackager
         FolderBrowserDialog courseFolderDialog = new FolderBrowserDialog();
         SaveFileDialog savingPackageDialog = new SaveFileDialog();
         OpenFileDialog ofd = new OpenFileDialog();
-        int sections = 0, pages = 0, enumer = 0;
 
         public mainForm()
         {
@@ -44,26 +43,26 @@ namespace ScormPackager
                 DirectoryInfo[] dirs = info.GetDirectories();
 
                 int i = 0;
+                Program.sections = 0; Program.pages = 0;
                 sectionsGV.Rows.Clear();
                 foreach (DirectoryInfo d in dirs)
                 {
                     FileInfo[] files = d.GetFiles();
                     foreach (FileInfo f in files)
                     {
-                        if ((f.Extension == ".html") || (f.Extension == ".js"))
-                            i++;
+                        if ((f.Extension == ".html") || (f.Extension == ".js")) i++;
                     }
-                    if (i > pages) pages = i;
+                    if (i > Program.pages) Program.pages = i;
                     i = 0;
-                    sections++;
+                    Program.sections++;
 
                     sectionsGV.Rows.Add(d.ToString());// запись в левую таблицу папок-разделов
                 }
 
                 sectionsGV.AutoResizeColumns();
-                Program.Titles = new string[sections, pages];
-                Program.OrgHref = new string[sections, pages];
-                Program.OrgIDref = new string[sections, pages];
+                Program.Titles = new string[Program.sections, Program.pages + 1];// в [i, 0] записывает название раздела
+                Program.OrgHref = new string[Program.sections + 1, Program.pages];// в [0, i] записываются ссылки из папки shared
+                Program.OrgIDref = new string[Program.sections, Program.pages];
                 sectionsGV_CellContentClick(null, new DataGridViewCellEventArgs(0, 0));
             }
             ActiveControl = courseLabel;
@@ -119,19 +118,17 @@ namespace ScormPackager
             DirectoryInfo info = new DirectoryInfo(Program.courseFolderPath + "\\" + selectedFolder);
             FileInfo[] files = info.GetFiles();
             pagesGV.Rows.Clear();
-            if ((sectionsGV.CurrentRow.Cells[2].Value != null) && (Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), 0] != null))
+            if ((sectionsGV.CurrentRow.Cells[2].Value != null) && (Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, 0] != null))
             {
-                int i = 1;
-                while (Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i] != null)
+                for (int i = 0; i < Program.pages; i++)
                 {
-                    string[] row = new string[] { Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i],
-                                                  Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i],
-                                                  i.ToString() };
-                    pagesGV.Rows.Add(row);
-                    //pagesGV.Rows[i-1].Cells[0].Value = Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i];
-                    //pagesGV.Rows[i-1].Cells[1].Value = Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i];
-                    //pagesGV.Rows[i-1].Cells[2].Value = i;
-                    i++;
+                    if (Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i] != null)
+                    {
+                        string[] row = new string[] { Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i],
+                                                      Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, i + 1],
+                                                      (i+1).ToString() };
+                        pagesGV.Rows.Add(row);
+                    }
                 }
             }
             else
@@ -140,7 +137,6 @@ namespace ScormPackager
                 {
                     if ((f.Extension == ".html") || (f.Extension == ".js"))
                     {
-                        pages++;
                         pagesGV.Rows.Add(f.ToString()); // запись в листбокс html и js-файлов из раздела
                     }
                 }
@@ -177,21 +173,17 @@ namespace ScormPackager
 
         private void writeButton_Click(object sender, EventArgs e)
         {
-            Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), 0] = sectionsGV.CurrentRow.Cells[1].Value.ToString();
+            Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, 0] = sectionsGV.CurrentRow.Cells[1].Value.ToString();
             foreach (DataGridViewRow a in pagesGV.Rows)
             {
-                Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1,
                                Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[1].Value.ToString();
-                Program.OrgIDref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
-                                 Convert.ToInt32(a.Cells[2].Value.ToString())] = enumer.ToString();
+                Program.OrgIDref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1,
+                                 Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = Program.enumer.ToString();
                 Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
-                                 Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[0].Value.ToString();
-                enumer++;
+                                 Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
+                Program.enumer++;
             }
-        }
-
-        private void pagesGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
         }
     }

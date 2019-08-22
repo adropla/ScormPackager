@@ -20,18 +20,17 @@ namespace ScormPackager
             Size resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(resolution.Width * 4 / 9, resolution.Height * 4 / 10);
             //ошибка, если не указан путь с курсом
+            label.Text = "Упаковка выполена успешно!";
             if (Program.courseFolderPath == null)
             {
                 label.Location = new Point(23, 0);
                 label.Text = "Ошибка!\nУкажите папку с курсом";
             }
-            else if (Program.courseTitle == null)
+            else if (Program.courseTitle == "")
             {
                 label.Location = new Point(23, 0);
                 label.Text = "Ошибка!\nУкажите название курса";
-            }
-            else
-                label.Text = "Упаковка выполена успешно!";
+            }   
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
