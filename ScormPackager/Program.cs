@@ -7,6 +7,8 @@ using System.IO.Compression;
 using System.IO;
 using System.Xml;
 using HtmlAgilityPack;
+using System.Text;
+
 namespace ScormPackager
 {
     static class Program
@@ -46,7 +48,7 @@ namespace ScormPackager
             XmlDocument manifest = new XmlDocument();
             XmlDeclaration xmlDeclaration = manifest.CreateXmlDeclaration("1.0", "utf-8", "no");
             manifest.AppendChild(xmlDeclaration);
-            
+
             // тег manifest
             XmlElement manifestElement = manifest.CreateElement("manifest");
             // атрибуты тега manifest ? сделать переносы атрибутов на новую строку
@@ -70,6 +72,7 @@ namespace ScormPackager
 
             //organizations
             // ? сделать определение опроса 
+            // ? когда есть папка shared, создаётся лишний item раздела
             XmlElement organizations = manifest.CreateElement("organizations");
             XmlElement organization = manifest.CreateElement("organization");
             XmlElement orgTitle = manifest.CreateElement("title");

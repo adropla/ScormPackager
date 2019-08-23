@@ -63,7 +63,7 @@
             this.referenceButton.Text = "Справка";
             this.referenceButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.referenceButton.UseVisualStyleBackColor = false;
-            this.referenceButton.Click += new System.EventHandler(this.programmReference_Click);
+            this.referenceButton.Click += new System.EventHandler(this.referenceButton_Click);
             // 
             // startPackagingButton
             // 
@@ -79,7 +79,7 @@
             this.startPackagingButton.Text = "Упаковать";
             this.startPackagingButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.startPackagingButton.UseVisualStyleBackColor = false;
-            this.startPackagingButton.Click += new System.EventHandler(this.startPackaging_Click);
+            this.startPackagingButton.Click += new System.EventHandler(this.startPackagingButton_Click);
             // 
             // courseLabel
             // 
@@ -120,7 +120,6 @@
             this.textBoxSelectFolder.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.textBoxSelectFolder.Size = new System.Drawing.Size(489, 23);
             this.textBoxSelectFolder.TabIndex = 11;
-            this.textBoxSelectFolder.Text = "...";
             // 
             // courseNameTB
             // 
@@ -134,6 +133,7 @@
             this.courseNameTB.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.courseNameTB.Size = new System.Drawing.Size(577, 23);
             this.courseNameTB.TabIndex = 19;
+            this.courseNameTB.TextChanged += new System.EventHandler(this.courseNameTB_TextChanged);
             // 
             // courseNameLabel
             // 
