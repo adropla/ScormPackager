@@ -16,6 +16,8 @@ namespace ScormPackager
         FolderBrowserDialog courseFolderDialog = new FolderBrowserDialog();
         SaveFileDialog savingPackageDialog = new SaveFileDialog();
         OpenFileDialog ofd = new OpenFileDialog();
+        bool pageIndexIsMatch;
+        bool sectionIndexIsMatch;
 
         public mainForm()
         {
@@ -24,7 +26,7 @@ namespace ScormPackager
             // красивое расположение окна на экране
             StartPosition = FormStartPosition.Manual;
             Size resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size;
-            Location = new Point(resolution.Width * 3 / 8, resolution.Height * 3 / 8);
+            Location = new Point(resolution.Width * 3 / 10, resolution.Height * 3 / 10);
 
             ActiveControl = courseLabel;
         }
@@ -116,43 +118,155 @@ namespace ScormPackager
 
         private void writeButton_Click(object sender, EventArgs e)// запись организации
         {
+            bool error = false;
+            bool[] pageIndex = new bool[Program.pages + 1];
             if (sectionsGV.RowCount != 0)
             {
-                // проверка на ошибки
-                bool error = false; 
                 if (sectionsGV.CurrentRow.Cells[2].Value == null)
                 {
                     sectionsGV.CurrentRow.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
                     error = true;
+                    notificationTB.Text = "Введите данные раздела";
                 }
-                foreach (DataGridViewRow a in pagesGV.Rows)
+                else
                 {
-                    if (a.Cells[2].Value == null)
+                    if (Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) != 0)
+                        if (Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, 0] != null)
+                        {
+                            sectionsGV.CurrentRow.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                            error = true;
+                            notificationTB.Text = "Неверный индекс раздела";
+                        }
+                }
+
+                if (sectionsGV.CurrentRow.Cells[2].Value != null)
+                {
+                    if (Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) != 0)
                     {
-                        a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
-                        error = true;
+                        if (sectionsGV.CurrentRow.Cells[1].Value == null)
+                        {
+                            sectionsGV.CurrentRow.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                            error = true;
+                            notificationTB.Text = "Введите данные раздела";
+                        }
+                        foreach (DataGridViewRow a in pagesGV.Rows)
+                        {
+                            if (a.Cells[2].Value == null)
+                            {
+                                a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                                error = true;
+                                notificationTB.Text = "Введите индекс страницы";
+                            }
+                            else
+                            {
+                                if ((a.Cells[1].Value == null) && (Convert.ToInt32(a.Cells[2].Value.ToString()) != 0))
+                                {
+                                    a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                                    error = true;
+                                    notificationTB.Text = "Введите название страницы";
+                                }
+                                if (Convert.ToInt32(a.Cells[2].Value.ToString()) > Convert.ToInt32((pagesGV.RowCount.ToString())))
+                                {
+                                    a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                                    error = true;
+                                    notificationTB.Text = "Индекс превышает количество страниц";
+                                    break;
+                                }
+                            }
+
+                            // если есть повторяющиеся индексы в правой колонке, то выделить их
+                            if (a.Cells[2].Value != null)
+                            {
+                                if (pageIndex[Convert.ToInt32(a.Cells[2].Value.ToString())] == true)
+                                {
+                                    foreach (DataGridViewRow b in pagesGV.Rows)
+                                    {
+                                        if (b.Cells[2].Value != null)
+                                        {
+                                            if (b.Cells[2].Value.ToString() == a.Cells[2].Value.ToString())
+                                            {
+                                                b.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                                            }
+                                            else
+                                            {
+                                                b.DefaultCellStyle.BackColor = SystemColors.Window;
+                                            }
+                                        }
+                                    }
+                                    notificationTB.Text = "Повторяющиееся индексы страниц";
+                                    error = true;
+                                    pageIndexIsMatch = true;
+                                }
+                                else
+                                {
+                                    pageIndex[Convert.ToInt32(a.Cells[2].Value.ToString())] = true;
+                                    pageIndex[0] = false;
+                                }
+                            }
+                        }
                     }
-                    else if ((a.Cells[2].Value.ToString() != "0") && (a.Cells[1].Value == null))
+
+                    foreach (DataGridViewRow a in sectionsGV.Rows)
                     {
-                        a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
-                        error = true;
+                        if (a.Cells[2].Value != null)
+                        {
+                            if ((Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) == Convert.ToInt32(a.Cells[2].Value.ToString()))
+                                && (sectionsGV.CurrentRow.Index != a.Index))
+                            {
+                                notificationTB.Text = "Повторяющиееся индексы разделов";
+                                error = true;
+                                a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                            }
+                            else
+                            {
+                                if (a.DefaultCellStyle.BackColor != Color.FromArgb(192, 255, 192)) a.DefaultCellStyle.BackColor = SystemColors.Window;
+                            }
+                        }
                     }
                 }
-                // если ошибок нет, то проиходит запись
+
+                // если есть ошибки, выделить окно уведомлений в красный
+                if (error)
+                {
+                    notificationTB.BackColor = Color.FromArgb(255, 192, 192);
+                }
+                // если ошибок нет, то происходит запись
                 if (!error)
                 {
-                    Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, 0] = sectionsGV.CurrentRow.Cells[1].Value.ToString();
-                    foreach (DataGridViewRow a in pagesGV.Rows)
+                    if (Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) != 0)
                     {
-                        Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1,
-                                       Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[1].Value.ToString();
-                        Program.OrgIDref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1,
-                                         Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = Program.enumer.ToString();
-                        Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
-                                         Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
-                        Program.enumer++;
+                        Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, 0] = sectionsGV.CurrentRow.Cells[1].Value.ToString();
+                        foreach (DataGridViewRow a in pagesGV.Rows)
+                        {
+                            if (Convert.ToInt32(a.Cells[2].Value.ToString()) != 0)
+                            {
+                                Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1,
+                                                Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[1].Value.ToString();
+                                Program.OrgIDref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1,
+                                                    Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = Program.enumer.ToString();
+                                Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                                                    Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
+                                Program.enumer++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int i = 0;
+                        foreach (DataGridViewRow a in pagesGV.Rows)
+                        {
+                            if (a.Cells[2].Value == null)
+                            {
+                                Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i++] = a.Cells[0].Value.ToString();
+                            }
+                            else Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                                                Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
+                        }
                     }
                     sectionsGV.CurrentRow.DefaultCellStyle.BackColor = Color.FromArgb(192, 255, 192);// зелёный
+                    sectionsGV.CurrentRow.ReadOnly = true;
+                    notificationTB.Text = "Запись прошла успешно";
+                    notificationTB.BackColor = Color.FromArgb(192, 255, 192);
                 }
             }
             else errors();
@@ -160,25 +274,41 @@ namespace ScormPackager
 
         private void sectionsGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            notificationTB.Text = "";
+            notificationTB.BackColor = SystemColors.Window;
             //заполнение правой таблицы
             string selectedFolder = sectionsGV.CurrentRow.Cells[0].Value.ToString();
             DirectoryInfo info = new DirectoryInfo(Program.courseFolderPath + "\\" + selectedFolder);
             FileInfo[] files = info.GetFiles();
             pagesGV.Rows.Clear();
-            if ((sectionsGV.CurrentRow.Cells[2].Value != null) && (Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, 0] != null))
+
+            try
             {
-                for (int i = 0; i < Program.pages; i++)
+                if (sectionsGV.CurrentRow.ReadOnly == true)
                 {
-                    if (Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i] != null)
+                    for (int i = 0; i < Program.pages; i++)
                     {
-                        string[] row = new string[] { Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i],
-                                                      Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, i + 1],
-                                                      (i+1).ToString() };
-                        pagesGV.Rows.Add(row);
+                        if (Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i] != null)
+                        {
+                            string[] row = new string[] { Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i],
+                                                Program.Titles[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) - 1, i + 1],
+                                                (i+1).ToString() };
+                            pagesGV.Rows.Add(row);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (FileInfo f in files)
+                    {
+                        if ((f.Extension == ".html") || (f.Extension == ".js"))
+                        {
+                            pagesGV.Rows.Add(f.ToString()); // запись в листбокс html и js-файлов из раздела
+                        }
                     }
                 }
             }
-            else
+            catch
             {
                 foreach (FileInfo f in files)
                 {
@@ -188,6 +318,11 @@ namespace ScormPackager
                     }
                 }
             }
+
+            foreach (DataGridViewRow a in sectionsGV.Rows)
+            {
+                if (a.DefaultCellStyle.BackColor != Color.FromArgb(192, 255, 192)) a.DefaultCellStyle.BackColor = SystemColors.Window;
+            }
             pagesGV.AutoResizeColumns();
             pagesGV.Update();
         }
@@ -195,6 +330,21 @@ namespace ScormPackager
         //bug - после ввода цифр иногда не вводятся буквы
         private void Num_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
+            if (pageIndexIsMatch)
+            {
+                foreach (DataGridViewRow a in pagesGV.Rows)
+                {
+                    a.DefaultCellStyle.BackColor = SystemColors.Window;
+                }
+            }
+            if (sectionIndexIsMatch)
+            {
+                foreach (DataGridViewRow a in sectionsGV.Rows)
+                {
+                    a.DefaultCellStyle.BackColor = SystemColors.Window;
+                }
+            }
+
             (sender as DataGridView).CurrentRow.DefaultCellStyle.BackColor = SystemColors.Window;
             if ((sender as DataGridView).CurrentCell.ColumnIndex == 2)
             {
@@ -221,37 +371,48 @@ namespace ScormPackager
         private void courseNameTB_TextChanged(object sender, EventArgs e)
         {
             courseNameTB.BackColor = SystemColors.ButtonHighlight;
+            notificationTB.Text = "";
+            notificationTB.BackColor = SystemColors.Window;
         }
 
         private bool errors()
         {
-            bool flag = false;
+            bool error = false;
+
             if (Program.courseFolderPath == null)
-            {   
+            {
                 textBoxSelectFolder.BackColor = Color.FromArgb(255, 192, 192);
+                notificationTB.Text = "Выберите курс";
+                notificationTB.BackColor = Color.FromArgb(255, 192, 192);
                 return true;
             }
-            if (courseNameTB.Text == "")
-            {
-                courseNameTB.BackColor = Color.FromArgb(255, 192, 192);
-                flag = true;
-            }
+
             foreach (DataGridViewRow a in sectionsGV.Rows)
             {
-                if (a.Cells[2].Value == null)
+                if (a.ReadOnly != true)
                 {
                     a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
-                    flag = true;
-                }
-                else if ((a.Cells[2].Value.ToString() != "0") && (a.Cells[1].Value == null))
-                {
-                    a.DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
-                    flag = true;
+                    notificationTB.Text = "Проведите запись всех разделов";
+                    error = true;
                 }
             }
 
-            if (flag) return true;
-            else return false;
+            if (courseNameTB.Text == "")
+            {
+                courseNameTB.BackColor = Color.FromArgb(255, 192, 192);
+                notificationTB.Text = "Введите название курса";
+                error = true;
+            }
+
+            if (error)
+            {
+                notificationTB.BackColor = Color.FromArgb(255, 192, 192);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

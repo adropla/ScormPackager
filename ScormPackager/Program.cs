@@ -99,6 +99,13 @@ namespace ScormPackager
                         XmlAttribute identifierref = manifest.CreateAttribute("identifierref");
                         identifierref.InnerText = Program.OrgIDref[i, j];
                         pageItem.Attributes.Append(identifierref);
+                        if (Program.OrgHref[i, j] != null)
+                            if (Program.OrgHref[i, j].Contains(".js"))
+                            {
+                                XmlAttribute parameters = manifest.CreateAttribute("parameters");
+                                parameters.InnerText = "?questions=" + Titles[i, 0];
+                                pageItem.Attributes.Append(parameters);
+                            }
                         sectionItem.AppendChild(pageItem);
                     }
                 }
@@ -173,6 +180,7 @@ namespace ScormPackager
 
         public static void zipFolder(string folder, string path)
         {
+            // ? в архиве должны быть файлы, а не папка
             ZipFile.CreateFromDirectory(folder, path, CompressionLevel.Fastest, true); // упаковка папки
         }
 

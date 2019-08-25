@@ -45,6 +45,7 @@
             this.ColumnTitle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.writeButton = new System.Windows.Forms.Button();
+            this.notificationTB = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.sectionsGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pagesGV)).BeginInit();
             this.SuspendLayout();
@@ -55,13 +56,13 @@
             this.referenceButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.referenceButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.referenceButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.referenceButton.Location = new System.Drawing.Point(329, 365);
+            this.referenceButton.Location = new System.Drawing.Point(306, 366);
             this.referenceButton.Margin = new System.Windows.Forms.Padding(2);
             this.referenceButton.Name = "referenceButton";
-            this.referenceButton.Size = new System.Drawing.Size(84, 23);
+            this.referenceButton.Size = new System.Drawing.Size(90, 23);
             this.referenceButton.TabIndex = 15;
             this.referenceButton.Text = "Справка";
-            this.referenceButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.referenceButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.referenceButton.UseVisualStyleBackColor = false;
             this.referenceButton.Click += new System.EventHandler(this.referenceButton_Click);
             // 
@@ -71,13 +72,13 @@
             this.startPackagingButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.startPackagingButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.startPackagingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.startPackagingButton.Location = new System.Drawing.Point(505, 365);
+            this.startPackagingButton.Location = new System.Drawing.Point(499, 366);
             this.startPackagingButton.Margin = new System.Windows.Forms.Padding(2);
             this.startPackagingButton.Name = "startPackagingButton";
-            this.startPackagingButton.Size = new System.Drawing.Size(84, 23);
+            this.startPackagingButton.Size = new System.Drawing.Size(90, 23);
             this.startPackagingButton.TabIndex = 14;
             this.startPackagingButton.Text = "Упаковать";
-            this.startPackagingButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.startPackagingButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.startPackagingButton.UseVisualStyleBackColor = false;
             this.startPackagingButton.Click += new System.EventHandler(this.startPackagingButton_Click);
             // 
@@ -98,10 +99,10 @@
             this.browseCourseButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.browseCourseButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.browseCourseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.browseCourseButton.Location = new System.Drawing.Point(506, 27);
+            this.browseCourseButton.Location = new System.Drawing.Point(499, 27);
             this.browseCourseButton.Margin = new System.Windows.Forms.Padding(2);
             this.browseCourseButton.Name = "browseCourseButton";
-            this.browseCourseButton.Size = new System.Drawing.Size(83, 23);
+            this.browseCourseButton.Size = new System.Drawing.Size(90, 23);
             this.browseCourseButton.TabIndex = 12;
             this.browseCourseButton.Text = "Обзор...";
             this.browseCourseButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -118,7 +119,7 @@
             this.textBoxSelectFolder.Name = "textBoxSelectFolder";
             this.textBoxSelectFolder.ReadOnly = true;
             this.textBoxSelectFolder.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.textBoxSelectFolder.Size = new System.Drawing.Size(489, 23);
+            this.textBoxSelectFolder.Size = new System.Drawing.Size(481, 23);
             this.textBoxSelectFolder.TabIndex = 11;
             // 
             // courseNameTB
@@ -159,14 +160,14 @@
             this.Folders,
             this.Title,
             this.Numbers});
-            this.sectionsGV.Location = new System.Drawing.Point(12, 100);
+            this.sectionsGV.Location = new System.Drawing.Point(12, 101);
             this.sectionsGV.MultiSelect = false;
             this.sectionsGV.Name = "sectionsGV";
             this.sectionsGV.RowHeadersVisible = false;
             this.sectionsGV.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.sectionsGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.sectionsGV.ShowCellErrors = false;
-            this.sectionsGV.Size = new System.Drawing.Size(288, 259);
+            this.sectionsGV.Size = new System.Drawing.Size(288, 258);
             this.sectionsGV.TabIndex = 27;
             this.sectionsGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.sectionsGV_CellContentClick);
             this.sectionsGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Num_EditingControlShowing);
@@ -211,14 +212,14 @@
             this.dataGridViewTextBoxColumn1,
             this.ColumnTitle2,
             this.dataGridViewTextBoxColumn2});
-            this.pagesGV.Location = new System.Drawing.Point(306, 100);
+            this.pagesGV.Location = new System.Drawing.Point(306, 101);
             this.pagesGV.MultiSelect = false;
             this.pagesGV.Name = "pagesGV";
             this.pagesGV.RowHeadersVisible = false;
             this.pagesGV.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.pagesGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.pagesGV.ShowCellErrors = false;
-            this.pagesGV.Size = new System.Drawing.Size(283, 259);
+            this.pagesGV.Size = new System.Drawing.Size(283, 258);
             this.pagesGV.TabIndex = 28;
             this.pagesGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Num_EditingControlShowing);
             // 
@@ -253,15 +254,26 @@
             this.writeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.writeButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.writeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.writeButton.Location = new System.Drawing.Point(417, 365);
+            this.writeButton.Location = new System.Drawing.Point(402, 366);
             this.writeButton.Margin = new System.Windows.Forms.Padding(2);
             this.writeButton.Name = "writeButton";
-            this.writeButton.Size = new System.Drawing.Size(84, 23);
+            this.writeButton.Size = new System.Drawing.Size(90, 23);
             this.writeButton.TabIndex = 29;
-            this.writeButton.Text = "Запись";
-            this.writeButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.writeButton.Text = "Записать";
+            this.writeButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.writeButton.UseVisualStyleBackColor = false;
             this.writeButton.Click += new System.EventHandler(this.writeButton_Click);
+            // 
+            // notificationTB
+            // 
+            this.notificationTB.BackColor = System.Drawing.SystemColors.Window;
+            this.notificationTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.notificationTB.Location = new System.Drawing.Point(12, 370);
+            this.notificationTB.MinimumSize = new System.Drawing.Size(288, 23);
+            this.notificationTB.Name = "notificationTB";
+            this.notificationTB.ReadOnly = true;
+            this.notificationTB.Size = new System.Drawing.Size(288, 23);
+            this.notificationTB.TabIndex = 30;
             // 
             // mainForm
             // 
@@ -269,6 +281,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(601, 398);
+            this.Controls.Add(this.notificationTB);
             this.Controls.Add(this.writeButton);
             this.Controls.Add(this.pagesGV);
             this.Controls.Add(this.sectionsGV);
@@ -311,5 +324,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Numbers;
         private System.Windows.Forms.Button writeButton;
+        private System.Windows.Forms.TextBox notificationTB;
     }
 }

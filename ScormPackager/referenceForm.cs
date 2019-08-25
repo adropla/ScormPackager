@@ -18,7 +18,7 @@ namespace ScormPackager
             //красивое расположение окна
             StartPosition = FormStartPosition.Manual;
             Size resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size;
-            Location = new Point(resolution.Width * 7 / 17, resolution.Height * 1 / 8);
+            Location = new Point(resolution.Width * 9 / 23, resolution.Height * 3 / 11);
             ActiveControl = buttonOK;
         }
 
