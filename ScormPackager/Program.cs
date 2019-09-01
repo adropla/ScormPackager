@@ -126,7 +126,7 @@ namespace ScormPackager
 
             //resources
             // в dependecy записываются все i-файлы из OrgHref[0, i](там все файлы из папки shared, если она вообще есть)
-            XmlElement resources = manifest.CreateElement("resources", "http://www.imsproject.org/xsd/imscp_rootv1p1p2"); 
+            XmlElement resources = manifest.CreateElement("resources"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/); 
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             var filesSplit = new List<string[]>();  //0 path 1 name 2 type
             for (int i = 0; i < files.Count; i++)
@@ -137,8 +137,8 @@ namespace ScormPackager
             {
                 if ((filesSplit[i][2] == "html") || (filesSplit[i][2] == "js"))
                 {
-                    XmlElement file = manifest.CreateElement("file", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
-                    XmlElement resource = manifest.CreateElement("resource", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
+                    XmlElement file = manifest.CreateElement("file"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+                    XmlElement resource = manifest.CreateElement("resource"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
                     XmlAttribute type = manifest.CreateAttribute("type");
                     XmlText webcontent = manifest.CreateTextNode("webcontent");
                     type.AppendChild(webcontent);
@@ -163,16 +163,39 @@ namespace ScormPackager
                     hrefcopy.AppendChild(referencecopy);
                     file.Attributes.Append(hrefcopy);
                     resource.AppendChild(file);
-                    XmlElement dependency = manifest.CreateElement("dependency", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
+                    XmlElement dependency = manifest.CreateElement("dependency"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
                     XmlText common = manifest.CreateTextNode("common_files");
-                    XmlAttribute identifiercommon = manifest.CreateAttribute("identifier");
+                    XmlAttribute identifiercommon = manifest.CreateAttribute("identifierref");
                     identifiercommon.AppendChild(common);
                     dependency.Attributes.Append(identifiercommon);
                     resource.AppendChild(dependency);
                     resources.AppendChild(resource);
                 }
             }
+            XmlElement sharedres = manifest.CreateElement("resource"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+            XmlAttribute sharedid = manifest.CreateAttribute("identifier"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+            XmlText residvalue = manifest.CreateTextNode("common_files");
+            sharedid.AppendChild(residvalue);
+            XmlAttribute sharedtype = manifest.CreateAttribute("type");
+            XmlText sharedtypevalue = manifest.CreateTextNode("webcontent");
+            sharedtype.AppendChild(sharedtypevalue);
+            XmlAttribute sharedadlcpscormType = manifest.CreateAttribute("adlcp", "scormtype", "http://www.adlnet.org/xsd/adlcp_rootv1p2");
+            XmlText sharedscormtype = manifest.CreateTextNode("asset");
+            sharedadlcpscormType.AppendChild(sharedscormtype);
+            sharedres.Attributes.Append(sharedid);
+            sharedres.Attributes.Append(sharedtype);
+            sharedres.Attributes.Append(sharedadlcpscormType);
+            for (int i = 0; i < OrgHref.GetLength(1); i++)
+            {
+                XmlElement shared = manifest.CreateElement("file"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+                XmlAttribute sharedhref = manifest.CreateAttribute("href");
+                XmlText hrefvalue = manifest.CreateTextNode(OrgHref[0, i]);
+                sharedhref.AppendChild(hrefvalue);
+                shared.Attributes.Append(sharedhref);
+                sharedres.AppendChild(shared);
 
+            }
+            resources.AppendChild(sharedres);
             manifestElement.AppendChild(resources);
             manifest.AppendChild(manifestElement);
             manifest.Save(path + @"\imsmanifest.xml");
