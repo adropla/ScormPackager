@@ -259,8 +259,20 @@ namespace ScormPackager
                             {
                                 Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()), i++] = a.Cells[0].Value.ToString();
                             }
-                            else Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                            else
+                            {
+                                if (Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) != 0)
+                                {
+                                    Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
                                                 Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
+                                }
+                                else
+                                {
+                                    Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                                               Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[0].Value.ToString();
+                                }
+                                i++;
+                            }
                         }
                     }
                     sectionsGV.CurrentRow.DefaultCellStyle.BackColor = Color.FromArgb(192, 255, 192);// зелёный

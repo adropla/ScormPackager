@@ -79,16 +79,16 @@ namespace ScormPackager
             orgTitle.InnerText = Program.courseTitle;
             organization.AppendChild(orgTitle);
 
-            for (int i = 0; i < sections; i++)
+            for (int i = 0; i < sections-1; i++)
             {
                 XmlElement sectionItem = manifest.CreateElement("item");
                 sectionItem.SetAttribute("identifier", "section" + (sectionNumerator++).ToString());
                 XmlElement sectionTitle = manifest.CreateElement("title");
                 sectionTitle.InnerText = Titles[i, 0];
                 sectionItem.AppendChild(sectionTitle);
-                for (int j = 0; j < pages; j++)
+                for (int j = 1; j <= pages; j++)
                 {
-                    if (Program.OrgIDref[i, j] != null)
+                    if ((Program.OrgIDref[i, j-1] != null) && (Program.OrgHref[i + 1, j - 1] != null))
                     {
                         XmlElement pageItem = manifest.CreateElement("item");
                         XmlElement pageTitle = manifest.CreateElement("title");
@@ -97,15 +97,14 @@ namespace ScormPackager
                         pageItem.AppendChild(pageTitle);
                         pageItem.SetAttribute("identifier", "page" + (pageNumerator++).ToString());
                         XmlAttribute identifierref = manifest.CreateAttribute("identifierref");
-                        identifierref.InnerText = Program.OrgIDref[i, j];
+                        identifierref.InnerText = Program.OrgIDref[i, j-1];
                         pageItem.Attributes.Append(identifierref);
-                        if (Program.OrgHref[i, j] != null)
-                            if (Program.OrgHref[i, j].Contains(".js"))
-                            {
-                                XmlAttribute parameters = manifest.CreateAttribute("parameters");
-                                parameters.InnerText = "?questions=" + Titles[i, 0];
-                                pageItem.Attributes.Append(parameters);
-                            }
+                        if (Program.OrgHref[i + 1, j - 1].Contains(".js"))
+                        {
+                            XmlAttribute parameters = manifest.CreateAttribute("parameters");
+                            parameters.InnerText = "?questions=" + Titles[i, 0];
+                            pageItem.Attributes.Append(parameters);
+                        }
                         sectionItem.AppendChild(pageItem);
                     }
                 }
@@ -129,47 +128,74 @@ namespace ScormPackager
             XmlElement resources = manifest.CreateElement("resources"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/); 
             var files = File.ReadAllLines(pathForFile + @"\PathNameType.txt").ToList();
             var filesSplit = new List<string[]>();  //0 path 1 name 2 type
+            bool[,] check = new bool[sections, pages];
             for (int i = 0; i < files.Count; i++)
             {
                 filesSplit.Add(files[i].Split(' '));
             }
             for (int i = 0; i < filesSplit.Count; i++)
             {
-                if ((filesSplit[i][2] == "html") || (filesSplit[i][2] == "js"))
+                if (!filesSplit[i][0].Contains("shared"))
                 {
-                    XmlElement file = manifest.CreateElement("file"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
-                    XmlElement resource = manifest.CreateElement("resource"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
-                    XmlAttribute type = manifest.CreateAttribute("type");
-                    XmlText webcontent = manifest.CreateTextNode("webcontent");
-                    type.AppendChild(webcontent);
-                    XmlAttribute identifier = manifest.CreateAttribute("identifier");
-                    //id берётся из OrgIDref сопоставляя с массивом OrgHref
-                    //например, OrgHref[1,1] = "course.html" , OrgIDref[1,1] = 5;
-                    //значит id файла "course.html" равно что ты пидор ёпта
-                    XmlText id = manifest.CreateTextNode(i.ToString());//?
-                    identifier.AppendChild(id);
-                    XmlAttribute adlcpscormType = manifest.CreateAttribute("adlcp", "scormtype", "http://www.adlnet.org/xsd/adlcp_rootv1p2");
-                    XmlText asset = manifest.CreateTextNode("asset");
-                    adlcpscormType.AppendChild(asset);
-                    XmlAttribute href = manifest.CreateAttribute("href");
-                    XmlText reference = manifest.CreateTextNode(filesSplit[i][0] + filesSplit[i][1] + '.' + filesSplit[i][2]);
-                    href.AppendChild(reference);
-                    resource.Attributes.Append(identifier);
-                    resource.Attributes.Append(type);
-                    resource.Attributes.Append(adlcpscormType);
-                    resource.Attributes.Append(href);
-                    XmlAttribute hrefcopy = manifest.CreateAttribute("href");
-                    XmlText referencecopy = manifest.CreateTextNode(filesSplit[i][0] + filesSplit[i][1] + '.' + filesSplit[i][2]);
-                    hrefcopy.AppendChild(referencecopy);
-                    file.Attributes.Append(hrefcopy);
-                    resource.AppendChild(file);
-                    XmlElement dependency = manifest.CreateElement("dependency"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
-                    XmlText common = manifest.CreateTextNode("common_files");
-                    XmlAttribute identifiercommon = manifest.CreateAttribute("identifierref");
-                    identifiercommon.AppendChild(common);
-                    dependency.Attributes.Append(identifiercommon);
-                    resource.AppendChild(dependency);
-                    resources.AppendChild(resource);
+                    if ((filesSplit[i][2] == "html") || (filesSplit[i][2] == "js"))
+                    {
+                        XmlElement file = manifest.CreateElement("file"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+                        XmlElement resource = manifest.CreateElement("resource"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+                        XmlAttribute type = manifest.CreateAttribute("type");
+                        XmlText webcontent = manifest.CreateTextNode("webcontent");
+                        type.AppendChild(webcontent);
+                        XmlAttribute adlcpscormType = manifest.CreateAttribute("adlcp", "scormtype", "http://www.adlnet.org/xsd/adlcp_rootv1p2");
+                        XmlText asset = manifest.CreateTextNode("asset");
+                        adlcpscormType.AppendChild(asset);
+                        XmlAttribute href = manifest.CreateAttribute("href");
+                        XmlText reference = manifest.CreateTextNode(null);
+                        if (filesSplit[i][2] == "js")
+                        {
+                            reference = manifest.CreateTextNode(OrgHref[0, 0]);
+                        }
+                        else
+                        {
+                            reference = manifest.CreateTextNode(filesSplit[i][0] + filesSplit[i][1] + '.' + filesSplit[i][2]);
+                        }
+                        href.AppendChild(reference);
+                        //id берётся из OrgIDref сопоставляя с массивом OrgHref
+                        //например, OrgHref[1,1] = "course.html" , OrgIDref[1,1] = 5;
+                        //значит id файла "course.html" равно что ты пидор ёпта
+                        XmlAttribute identifier = manifest.CreateAttribute("identifier");
+                        XmlText id = manifest.CreateTextNode(null);
+                        string refer = filesSplit[i][1] + '.' + filesSplit[i][2];
+                        bool flag = false;
+                        for (int g = 1; g < sections; g++)
+                        {
+                            if (flag) break;
+                            for (int f = 0; f < pages; f++)
+                            {
+                                if ((refer == OrgHref[g, f]) && (check[g, f] == false))
+                                {
+                                    id = manifest.CreateTextNode(OrgIDref[g - 1, f]);//?
+                                    check[g, f] = true;
+                                    flag = true;   
+                                }
+                            }
+                        }
+                        identifier.AppendChild(id);
+                        resource.Attributes.Append(identifier);
+                        resource.Attributes.Append(type);
+                        resource.Attributes.Append(adlcpscormType);
+                        resource.Attributes.Append(href);
+                        XmlAttribute hrefcopy = manifest.CreateAttribute("href");
+                        XmlText referencecopy = manifest.CreateTextNode(filesSplit[i][0] + filesSplit[i][1] + '.' + filesSplit[i][2]);
+                        hrefcopy.AppendChild(referencecopy);
+                        file.Attributes.Append(hrefcopy);
+                        resource.AppendChild(file);
+                        XmlElement dependency = manifest.CreateElement("dependency"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+                        XmlText common = manifest.CreateTextNode("common_files");
+                        XmlAttribute identifiercommon = manifest.CreateAttribute("identifierref");
+                        identifiercommon.AppendChild(common);
+                        dependency.Attributes.Append(identifiercommon);
+                        resource.AppendChild(dependency);
+                        resources.AppendChild(resource);
+                    }
                 }
             }
             XmlElement sharedres = manifest.CreateElement("resource"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
@@ -185,15 +211,17 @@ namespace ScormPackager
             sharedres.Attributes.Append(sharedid);
             sharedres.Attributes.Append(sharedtype);
             sharedres.Attributes.Append(sharedadlcpscormType);
-            for (int i = 0; i < OrgHref.GetLength(1); i++)
+            for (int i = 0; i < pages; i++)
             {
-                XmlElement shared = manifest.CreateElement("file"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
-                XmlAttribute sharedhref = manifest.CreateAttribute("href");
-                XmlText hrefvalue = manifest.CreateTextNode(OrgHref[0, i]);
-                sharedhref.AppendChild(hrefvalue);
-                shared.Attributes.Append(sharedhref);
-                sharedres.AppendChild(shared);
-
+                if (OrgHref[0, i] != null)
+                {
+                    XmlElement shared = manifest.CreateElement("file"/*, "http://www.imsproject.org/xsd/imscp_rootv1p1p2"*/);
+                    XmlAttribute sharedhref = manifest.CreateAttribute("href");
+                    XmlText hrefvalue = manifest.CreateTextNode(OrgHref[0, i]);
+                    sharedhref.AppendChild(hrefvalue);
+                    shared.Attributes.Append(sharedhref);
+                    sharedres.AppendChild(shared);
+                }
             }
             resources.AppendChild(sharedres);
             manifestElement.AppendChild(resources);
