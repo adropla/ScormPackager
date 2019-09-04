@@ -68,6 +68,7 @@ namespace ScormPackager
                 Program.Titles = new string[Program.sections, Program.pages + 1];// в [i, 0] записывает название раздела
                 Program.OrgHref = new string[Program.sections + 1, Program.pages];// в [0, i] записываются ссылки из папки shared
                 Program.OrgIDref = new string[Program.sections, Program.pages];
+                Program.isQuestion = new bool[Program.sections + 1, Program.pages];
                 sectionsGV.AutoResizeColumns();
                 sectionsGV.DefaultCellStyle.SelectionBackColor = Color.LightCyan;
                 sectionsGV.DefaultCellStyle.SelectionForeColor = Color.Black;
@@ -231,7 +232,7 @@ namespace ScormPackager
                     notificationTB.BackColor = Color.FromArgb(255, 192, 192);
                 }
                 // если ошибок нет, то происходит запись
-                if (!error)
+                else
                 {
                     if (Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) != 0)
                     {
@@ -246,6 +247,8 @@ namespace ScormPackager
                                                     Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = Program.enumer.ToString();
                                 Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
                                                     Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
+                                Program.isQuestion[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                                                    Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = Convert.ToBoolean(a.Cells[3].Value);
                                 Program.enumer++;
                             }
                         }
@@ -261,17 +264,8 @@ namespace ScormPackager
                             }
                             else
                             {
-                                if (Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()) != 0)
-                                {
-                                    Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
-                                                Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
-                                }
-                                else
-                                {
-                                    Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
-                                               Convert.ToInt32(a.Cells[2].Value.ToString())] = a.Cells[0].Value.ToString();
-                                }
-                                i++;
+                                Program.OrgHref[Convert.ToInt32(sectionsGV.CurrentRow.Cells[2].Value.ToString()),
+                                            Convert.ToInt32(a.Cells[2].Value.ToString()) - 1] = a.Cells[0].Value.ToString();
                             }
                         }
                     }

@@ -51,13 +51,12 @@ namespace ScormPackager
 
             // тег manifest
             XmlElement manifestElement = manifest.CreateElement("manifest");
-            // атрибуты тега manifest ? сделать переносы атрибутов на новую строку
+            // атрибуты тега manifest 
             manifestElement.SetAttribute("identifier", "com.scorm.golfsamples.contentpackaging.multioscosinglefile.12");
             manifestElement.SetAttribute("version", "1");
             manifestElement.SetAttribute("xmlns", "http://www.imsproject.org/xsd/imscp_rootv1p1p2");
             manifestElement.SetAttribute("xmlns:adlcp", "http://www.adlnet.org/xsd/adlcp_rootv1p2");
             manifestElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            // ? сделать переносы аргумента
             manifestElement.SetAttribute("xsi:schemaLocation", "http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd");
 
             //metadata
@@ -71,8 +70,7 @@ namespace ScormPackager
             manifestElement.AppendChild(metadata);
 
             //organizations
-            // ? сделать определение опроса 
-            // ? когда есть папка shared, создаётся лишний item раздела
+            // ? сделать определение опроса
             XmlElement organizations = manifest.CreateElement("organizations");
             XmlElement organization = manifest.CreateElement("organization");
             XmlElement orgTitle = manifest.CreateElement("title");
@@ -99,7 +97,7 @@ namespace ScormPackager
                         XmlAttribute identifierref = manifest.CreateAttribute("identifierref");
                         identifierref.InnerText = Program.OrgIDref[i, j-1];
                         pageItem.Attributes.Append(identifierref);
-                        if (Program.OrgHref[i + 1, j - 1].Contains(".js"))
+                        if (Program.isQuestion[i + 1, j - 1] == true)
                         {
                             XmlAttribute parameters = manifest.CreateAttribute("parameters");
                             parameters.InnerText = "?questions=" + Titles[i, 0];
@@ -275,8 +273,9 @@ namespace ScormPackager
                              pathForFile,
                              courseTitle; // название курса  
         public static string[,] Titles,    // [sections, pages]
-                                OrgIDref, 
+                                OrgIDref,
                                 OrgHref;
+        public static bool[,] isQuestion;
         public static int sections = 0, pages = 0, enumer = 0;
     }
 

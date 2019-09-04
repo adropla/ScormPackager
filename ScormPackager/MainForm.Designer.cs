@@ -41,11 +41,12 @@
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Numbers = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pagesGV = new System.Windows.Forms.DataGridView();
+            this.writeButton = new System.Windows.Forms.Button();
+            this.notificationTB = new System.Windows.Forms.TextBox();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnTitle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.writeButton = new System.Windows.Forms.Button();
-            this.notificationTB = new System.Windows.Forms.TextBox();
+            this.TestColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.sectionsGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pagesGV)).BeginInit();
             this.SuspendLayout();
@@ -211,7 +212,8 @@
             this.pagesGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
             this.ColumnTitle2,
-            this.dataGridViewTextBoxColumn2});
+            this.dataGridViewTextBoxColumn2,
+            this.TestColumn});
             this.pagesGV.Location = new System.Drawing.Point(306, 101);
             this.pagesGV.MultiSelect = false;
             this.pagesGV.Name = "pagesGV";
@@ -222,6 +224,33 @@
             this.pagesGV.Size = new System.Drawing.Size(283, 258);
             this.pagesGV.TabIndex = 28;
             this.pagesGV.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Num_EditingControlShowing);
+            // 
+            // writeButton
+            // 
+            this.writeButton.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.writeButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.writeButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.writeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.writeButton.Location = new System.Drawing.Point(402, 366);
+            this.writeButton.Margin = new System.Windows.Forms.Padding(2);
+            this.writeButton.Name = "writeButton";
+            this.writeButton.Size = new System.Drawing.Size(90, 23);
+            this.writeButton.TabIndex = 29;
+            this.writeButton.Text = "Записать";
+            this.writeButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.writeButton.UseVisualStyleBackColor = false;
+            this.writeButton.Click += new System.EventHandler(this.writeButton_Click);
+            // 
+            // notificationTB
+            // 
+            this.notificationTB.BackColor = System.Drawing.SystemColors.Window;
+            this.notificationTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.notificationTB.Location = new System.Drawing.Point(12, 370);
+            this.notificationTB.MinimumSize = new System.Drawing.Size(288, 23);
+            this.notificationTB.Name = "notificationTB";
+            this.notificationTB.ReadOnly = true;
+            this.notificationTB.Size = new System.Drawing.Size(288, 16);
+            this.notificationTB.TabIndex = 30;
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -248,32 +277,12 @@
             this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxColumn2.Width = 28;
             // 
-            // writeButton
+            // TestColumn
             // 
-            this.writeButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.writeButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.writeButton.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.writeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.writeButton.Location = new System.Drawing.Point(402, 366);
-            this.writeButton.Margin = new System.Windows.Forms.Padding(2);
-            this.writeButton.Name = "writeButton";
-            this.writeButton.Size = new System.Drawing.Size(90, 23);
-            this.writeButton.TabIndex = 29;
-            this.writeButton.Text = "Записать";
-            this.writeButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.writeButton.UseVisualStyleBackColor = false;
-            this.writeButton.Click += new System.EventHandler(this.writeButton_Click);
-            // 
-            // notificationTB
-            // 
-            this.notificationTB.BackColor = System.Drawing.SystemColors.Window;
-            this.notificationTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.notificationTB.Location = new System.Drawing.Point(12, 370);
-            this.notificationTB.MinimumSize = new System.Drawing.Size(288, 23);
-            this.notificationTB.Name = "notificationTB";
-            this.notificationTB.ReadOnly = true;
-            this.notificationTB.Size = new System.Drawing.Size(288, 23);
-            this.notificationTB.TabIndex = 30;
+            this.TestColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.TestColumn.HeaderText = "?";
+            this.TestColumn.Name = "TestColumn";
+            this.TestColumn.Width = 28;
             // 
             // mainForm
             // 
@@ -317,13 +326,14 @@
         private System.Windows.Forms.Label courseNameLabel;
         private System.Windows.Forms.DataGridView sectionsGV;
         private System.Windows.Forms.DataGridView pagesGV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTitle2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Folders;
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Numbers;
         private System.Windows.Forms.Button writeButton;
         private System.Windows.Forms.TextBox notificationTB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTitle2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn TestColumn;
     }
 }
